@@ -146,6 +146,15 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 					attachVideo(newElem);
 			    });
 
+			    // replace original Refresh for clean sources
+                var _refreshOriginal = Refresh;
+
+                Refresh = function(isAfterSearch) {
+                	 sources = [];
+                	 _refreshOriginal(isAfterSearch);
+                }
+
+
             });
 		});
 
