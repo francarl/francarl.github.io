@@ -192,7 +192,8 @@ function attachVideo(newElem) {
                             type: 'video/mp4'
                           }],
                           //,poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-                          idx: newElem.attr("idx")
+                          idx: newElem.attr("idx"),
+                          obj: newElem
                       }
             );
 
@@ -233,6 +234,17 @@ function attachVideo(newElem) {
 
                 videoplayer.playlist.currentItem(idx); 
                 videoplayer.play();
+
+                videoplayer.on('playlistitem', function() {
+
+                  var curIdx = videoplayer.playlist.currentIndex();
+                  
+                  var curElem = sources[curIdx].obj;
+
+                  $('.ovSel').css('border', 'none');
+                  curElem.children('.ovSel').css('border', '1px solid red');
+
+                });
 
                 $.magnificPopup.open({
                     items: {
