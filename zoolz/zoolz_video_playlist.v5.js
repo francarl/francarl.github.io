@@ -169,10 +169,14 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 function attachVideo(newElem) {
 	// 'this' refers to the newly created element
 
-    var originalURL = newElem.attr("href");
+    var originalURL = newElem.attr("onclick");
 
+	var regex = /q=[\w=]+/g;
+	var m = originalURL.match(regex);
+	var newUrl = "MyComputers/Download.aspx?" + m[0];
+	
     $.ajax({
-        url: originalURL,
+        url: newUrl,
         type: 'GET',
         async: true,
         headers: {
@@ -181,7 +185,7 @@ function attachVideo(newElem) {
             'IS_FOR_COLD_STORAGE': false
         },
         success: function(data, textStatus, request){
-            var durl = request.getResponseHeader('DownloadURL');
+            var durl = request.getResponseHeader('downloadUrl');
             console.log(durl);
             newElem.attr("href", durl);
 
@@ -275,7 +279,6 @@ function attachVideo(newElem) {
 	
 
 }
-
 
 
 
