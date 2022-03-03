@@ -12,6 +12,7 @@ $("head").append("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax
 $("head").append("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css' >");
 //$("head").append("<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.css' >");
 $("head").append("<link rel='stylesheet' href='https://francarl.github.io/videojs-chromecast/silvermine-videojs-chromecast.css' >");
+$("head").append("<link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.css' rel='stylesheet'>");
 
 
 $("head").append("<style>                   \
@@ -54,14 +55,21 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 
 	$.getScript('https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.js', function () {
 
-	$.getScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1', function () {	
+	$.getScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1', function () {
+
+	$.getScript('//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js', function () {	
 
 		var options = {
 		   controls: true,
 		   techOrder: [ 'chromecast', 'html5' ], // You may have more Tech, such as Flash or HLS
 		   plugins: {
 			  chromecast: {
-			  }
+			  },
+			  vjsdownload:{
+	              beforeElement: 'playbackRateMenuButton',
+	              textControl: 'Download video',
+	              name: 'downloadButton'
+	          }
 		   },
 		   playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0],
 		   muted: true
@@ -129,7 +137,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 
 		videojs.registerComponent("customNextButton", customNextButton);
 		videoplayer.getChild("controlBar").addChild("customNextButton", {});
-        
+
 		$.getScript('https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js', function () {
 
             $.getScript("https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js", function() {
@@ -160,7 +168,8 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 
 	});
 	});
-	});	
+	});
+	});
 });
 
 
