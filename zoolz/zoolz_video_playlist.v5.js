@@ -182,110 +182,111 @@ function attachVideo(newElem) {
 
 	var regex = /q=[\w=]+/g;
 	var m = originalURL.match(regex);
-	var newUrl = "MyComputers/Download.aspx?" + m[0];
+	if (m) {
+		var newUrl = "MyComputers/Download.aspx?" + m[0];
 	
-    $.ajax({
-        url: newUrl,
-        type: 'GET',
-        async: true,
-        headers: {
-            'PC_INDEX': machineId,
-            'S_KEY': 'Client',
-            'IS_FOR_COLD_STORAGE': false
-        },
-        success: function(data, textStatus, request){
-            var durl = request.getResponseHeader('downloadUrl');
-            console.log(durl);
-            newElem.attr("href", durl);
+		$.ajax({
+			url: newUrl,
+			type: 'GET',
+			async: true,
+			headers: {
+			    'PC_INDEX': machineId,
+			    'S_KEY': 'Client',
+			    'IS_FOR_COLD_STORAGE': false
+			},
+			success: function(data, textStatus, request){
+			    var durl = request.getResponseHeader('downloadUrl');
+			    console.log(durl);
+			    newElem.attr("href", durl);
 
-            sources.push(
-                     {
-                          sources: [{
-                            src: durl,
-                            type: 'video/mp4'
-                          }],
-                          //,poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-                          idx: newElem.attr("idx"),
-                          obj: newElem
-                      }
-            );
+			    sources.push(
+				     {
+					  sources: [{
+					    src: durl,
+					    type: 'video/mp4'
+					  }],
+					  //,poster: 'http://media.w3.org/2010/05/bunny/poster.png'
+					  idx: newElem.attr("idx"),
+					  obj: newElem
+				      }
+			    );
 
-            console.log("new elem: " + newElem.attr("idx"));
+			    console.log("new elem: " + newElem.attr("idx"));
 
-            newElem.unbind('click') // takes care of jQuery-bound click events
-                .attr('onclick', '') // clears `onclick` attributes in the HTML
-                .each(function() { // reset `onclick` event handlers
-                    this.onclick = null;
-                });
+			    newElem.unbind('click') // takes care of jQuery-bound click events
+				.attr('onclick', '') // clears `onclick` attributes in the HTML
+				.each(function() { // reset `onclick` event handlers
+				    this.onclick = null;
+				});
 
-            newElem.children("div").removeClass("ovDF").addClass("ovVI").addClass('ovSel');
+			    newElem.children("div").removeClass("ovDF").addClass("ovVI").addClass('ovSel');
 
-            newElem.click(function(event) {
+			    newElem.click(function(event) {
 
-                event.stopPropagation();
-
-
-                $('.ovSel').css('border', 'none');
-                newElem.children('.ovSel').css('border', '1px solid red');
-
-                var downloadUrl = newElem.attr("href");
-
-                // TODO ordinamento
-                sources.sort(function(a,b) {
-                    var keyA = +a.idx,
-                        keyB = +b.idx;
-				     if (keyA < keyB) return -1;
-				     if (keyA > keyB) return 1;
-				     return 0;
-                });
-
-                console.log(sources);
-
-                videoplayer.playlist(sources);
-
-                var idx = videoplayer.playlist.indexOf(downloadUrl);
-
-                videoplayer.playlist.currentItem(idx); 
-                videoplayer.play();
-
-                videoplayer.on('playlistitem', function() {
-
-                  var curIdx = videoplayer.playlist.currentIndex();
-                  
-                  var curElem = sources[curIdx].obj;
-
-                  $('.ovSel').css('border', 'none');
-                  curElem.children('.ovSel').css('border', '1px solid red');
-
-                });
-
-                $.magnificPopup.open({
-                    items: {
-                        src: '#test-popup' + randomId,
-                        type: 'inline'
-                    },
-
-                    callbacks: {
-                        close: function() {
-                        	//videoplayer.reset();
-                        	videoplayer.pause();
-                            videoplayer.src('');
-                        }
-                    }
-                });
+				event.stopPropagation();
 
 
+				$('.ovSel').css('border', 'none');
+				newElem.children('.ovSel').css('border', '1px solid red');
 
-                return false;
-            });
+				var downloadUrl = newElem.attr("href");
 
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });
+				// TODO ordinamento
+				sources.sort(function(a,b) {
+				    var keyA = +a.idx,
+					keyB = +b.idx;
+						     if (keyA < keyB) return -1;
+						     if (keyA > keyB) return 1;
+						     return 0;
+				});
 
-	
+				console.log(sources);
+
+				videoplayer.playlist(sources);
+
+				var idx = videoplayer.playlist.indexOf(downloadUrl);
+
+				videoplayer.playlist.currentItem(idx); 
+				videoplayer.play();
+
+				videoplayer.on('playlistitem', function() {
+
+				  var curIdx = videoplayer.playlist.currentIndex();
+
+				  var curElem = sources[curIdx].obj;
+
+				  $('.ovSel').css('border', 'none');
+				  curElem.children('.ovSel').css('border', '1px solid red');
+
+				});
+
+				$.magnificPopup.open({
+				    items: {
+					src: '#test-popup' + randomId,
+					type: 'inline'
+				    },
+
+				    callbacks: {
+					close: function() {
+						//videoplayer.reset();
+						videoplayer.pause();
+					    videoplayer.src('');
+					}
+				    }
+				});
+
+
+
+				return false;
+			    });
+
+			},
+			error: function (error) {
+			    console.log(error);
+			}
+		    });
+
+	}
 
 }
 
