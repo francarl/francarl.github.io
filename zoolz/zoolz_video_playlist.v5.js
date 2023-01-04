@@ -71,7 +71,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 	              name: 'downloadButton'
 	          }
 		   },
-		   playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0],
+		   playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
 		   muted: true
 		};
 
