@@ -224,7 +224,7 @@ function attachVideo(newElem) {
 				var ua = navigator.userAgent.toLowerCase();
 				var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 				if (isAndroid) {
-					console.log("isAndroid")
+					console.log("ua: " + ua)
 
 					newElem.click(function(event) {
 
