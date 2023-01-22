@@ -26,6 +26,9 @@ $("head").append("<style>                   \
 	  margin-right: auto;  \
 	  background:black;    \
 	}                      \
+	.fileDiv .ovBtns {     \
+      display: inherit !important; \
+	} \
 </style>");
 
 
@@ -221,64 +224,84 @@ function attachVideo(newElem) {
 
 			    newElem.children("div").removeClass("ovDF").addClass("ovVI").addClass('ovSel');
 
-			    newElem.click(function(event) {
+				var ua = navigator.userAgent.toLowerCase();
+				var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+				if (isAndroid) {
+					console.log("ua: " + ua);
 
-				event.stopPropagation();
+					newElem.click(function(event) {
 
+						event.stopPropagation();
 
-				$('.ovSel').css('border', 'none');
-				newElem.children('.ovSel').css('border', '1px solid red');
+						$('.ovSel').css('border', 'none');
+						newElem.children('.ovSel').css('border', '1px solid red');
 
-				var downloadUrl = newElem.attr("href");
+						var downloadUrl = newElem.attr("href");
 
-				// TODO ordinamento
-				sources.sort(function(a,b) {
-				    var keyA = +a.idx,
-					keyB = +b.idx;
-						     if (keyA < keyB) return -1;
-						     if (keyA > keyB) return 1;
-						     return 0;
-				});
+						downloadUrl = downloadUrl.replace("https:", "intent:") + "#Intent;action=android.intent.action.VIEW;scheme=https;type=video/mp4;end";
 
-				console.log(sources);
+						window.location.href = downloadUrl;
 
-				videoplayer.playlist(sources);
-
-				var idx = videoplayer.playlist.indexOf(downloadUrl);
-
-				videoplayer.playlist.currentItem(idx); 
-				videoplayer.play();
-
-				videoplayer.on('playlistitem', function() {
-
-				  var curIdx = videoplayer.playlist.currentIndex();
-
-				  var curElem = sources[curIdx].obj;
-
-				  $('.ovSel').css('border', 'none');
-				  curElem.children('.ovSel').css('border', '1px solid red');
-
-				});
-
-				$.magnificPopup.open({
-				    items: {
-					src: '#test-popup' + randomId,
-					type: 'inline'
-				    },
-
-				    callbacks: {
-					close: function() {
-						//videoplayer.reset();
-						videoplayer.pause();
-					    videoplayer.src('');
-					}
-				    }
-				});
-
-
-
-				return false;
-			    });
+						return false;
+					});
+					
+				} else {
+				    newElem.click(function(event) {
+	
+						event.stopPropagation();
+		
+						$('.ovSel').css('border', 'none');
+						newElem.children('.ovSel').css('border', '1px solid red');
+		
+						var downloadUrl = newElem.attr("href");
+		
+						// TODO ordinamento
+						sources.sort(function(a,b) {
+						    var keyA = +a.idx,
+							keyB = +b.idx;
+								     if (keyA < keyB) return -1;
+								     if (keyA > keyB) return 1;
+								     return 0;
+						});
+		
+						console.log(sources);
+		
+						videoplayer.playlist(sources);
+		
+						var idx = videoplayer.playlist.indexOf(downloadUrl);
+		
+						videoplayer.playlist.currentItem(idx); 
+						videoplayer.play();
+		
+						videoplayer.on('playlistitem', function() {
+		
+						  var curIdx = videoplayer.playlist.currentIndex();
+		
+						  var curElem = sources[curIdx].obj;
+		
+						  $('.ovSel').css('border', 'none');
+						  curElem.children('.ovSel').css('border', '1px solid red');
+		
+						});
+		
+						$.magnificPopup.open({
+						    items: {
+							src: '#test-popup' + randomId,
+							type: 'inline'
+						    },
+		
+						    callbacks: {
+							close: function() {
+								//videoplayer.reset();
+								videoplayer.pause();
+							    videoplayer.src('');
+							}
+						    }
+						});
+		
+						return false;
+				    });
+				}
 
 			},
 			error: function (error) {
@@ -289,6 +312,4 @@ function attachVideo(newElem) {
 	}
 
 }
-
-
 
