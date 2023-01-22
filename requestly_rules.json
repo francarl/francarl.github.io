@@ -1,0 +1,36 @@
+[
+  {
+    "createdBy": null,
+    "creationDate": 1588834044772,
+    "currentOwner": null,
+    "description": "",
+    "groupId": "",
+    "id": "Script_1588834044772",
+    "isSample": false,
+    "lastModifiedBy": null,
+    "modificationDate": 1674390003642,
+    "name": "Zoolz",
+    "objectType": "rule",
+    "pairs": [
+      {
+        "libraries": [],
+        "scripts": [
+          {
+            "codeType": "js",
+            "loadTime": "afterPageLoad",
+            "type": "url",
+            "value": "https://francarl.github.io/zoolz/zoolz_video_playlist.test.js"
+          }
+        ],
+        "source": {
+          "filters": {},
+          "key": "Url",
+          "operator": "Contains",
+          "value": "https://cloud1.zoolz.co.uk/"
+        }
+      }
+    ],
+    "ruleType": "Script",
+    "status": "Active"
+  }
+]
