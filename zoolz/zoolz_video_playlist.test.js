@@ -235,7 +235,9 @@ function attachVideo(newElem) {
 
 						var downloadUrl = newElem.attr("href");
 
-						window.location = downloadUrl;
+						downloadUrl = downloadUrl.replace("https:", "intent:") + "#Intent;action=android.intent.action.VIEW;scheme=https;type=video/mp4;end";
+
+						window.location.href = downloadUrl;
 
 						return false;
 					});
