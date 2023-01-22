@@ -26,6 +26,9 @@ $("head").append("<style>                   \
 	  margin-right: auto;  \
 	  background:black;    \
 	}                      \
+	.fileDiv .ovBtns {     \
+      display: inherit !important; \
+	} \
 </style>");
 
 
