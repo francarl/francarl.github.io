@@ -102,9 +102,52 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 				return "vjs-icon-replay vjs-control vjs-button";
 		   }
 		});
-
 		videojs.registerComponent("customRotateButton", customRotateButton);
 		videoplayer.getChild("controlBar").addChild("customRotateButton", {});
+
+
+		// zoom out
+		var vjsButton = videojs.getComponent("Button");
+		var customZoomoutButton = videojs.extend(vjsButton, {
+		   constructor: function(player, options) {
+			vjsButton.call(this, player, options);
+				this.controlText("Zoom out");
+		   },
+		   handleClick: function() {
+				//do something on click for example
+				var vi = videoplayer.children()[0];
+
+				zoomrotate.zoom += 0.1;
+				vi.style.transform = 'scale(' + zoomrotate.zoom + ')';	
+		   },
+		   buildCSSClass: function() {
+				return "vjs-icon-circle-outline vjs-control vjs-button";
+		   }
+		});
+		videojs.registerComponent("customZoomoutButton", customZoomoutButton);
+		videoplayer.getChild("controlBar").addChild("customZoomoutButton", {});
+
+		// zoom in
+		var vjsButton = videojs.getComponent("Button");
+		var customZoominButton = videojs.extend(vjsButton, {
+		   constructor: function(player, options) {
+			vjsButton.call(this, player, options);
+				this.controlText("Zoom in");
+		   },
+		   handleClick: function() {
+				//do something on click for example
+				var vi = videoplayer.children()[0];
+
+				zoomrotate.zoom -= 0.1;
+				vi.style.transform = 'scale(' + zoomrotate.zoom + ')';	
+		   },
+		   buildCSSClass: function() {
+				return "vjs-icon-circle vjs-control vjs-button";
+		   }
+		});
+		videojs.registerComponent("customZoominButton", customZoominButton);
+		videoplayer.getChild("controlBar").addChild("customZoominButton", {});
+
 
         // prev 
         var customPrevButton = videojs.extend(vjsButton, {
