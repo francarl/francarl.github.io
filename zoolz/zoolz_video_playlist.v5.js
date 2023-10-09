@@ -94,9 +94,11 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 		   handleClick: function() {
 				//do something on click for example
 				var vi = videoplayer.children()[0];
+				var poster = videoplayer.el_; // div vjs-poster
 
 				zoomrotate.rotate += 90;
 				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+				poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
 		   },
 		   buildCSSClass: function() {
 				return "vjs-icon-replay vjs-control vjs-button";
@@ -116,9 +118,11 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 		   handleClick: function() {
 				//do something on click for example
 				var vi = videoplayer.children()[0];
+				var poster = videoplayer.el_; // div vjs-poster
 
 				zoomrotate.zoom += 0.1;
 				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+				poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
 		   },
 		   buildCSSClass: function() {
 				return "vjs-icon-circle-outline vjs-control vjs-button";
@@ -137,9 +141,11 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 		   handleClick: function() {
 				//do something on click for example
 				var vi = videoplayer.children()[0];
+				var poster = videoplayer.el_; // div vjs-poster
 
 				zoomrotate.zoom -= 0.1;
 				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+				poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
 		   },
 		   buildCSSClass: function() {
 				return "vjs-icon-circle vjs-control vjs-button";
