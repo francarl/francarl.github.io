@@ -62,6 +62,8 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 
 	$.getScript('//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js', function () {	
 
+	$.getScript('https://raw.githubusercontent.com/xbgmsharp/videojs-rotatezoom/master/src/videojs.zoomrotate.js', function () {
+
 		var options = {
 		   controls: true,
 		   techOrder: [ 'chromecast', 'html5' ], // You may have more Tech, such as Flash or HLS
@@ -72,7 +74,11 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 	              beforeElement: 'playbackRateMenuButton',
 	              textControl: 'Download video',
 	              name: 'downloadButton'
-	          }
+	          },
+			  zoomrotate: { 
+				rotate: 90, 
+				zoom: 1.5
+			  } 
 		   },
 		   playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
 		   muted: true
@@ -169,6 +175,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
             });
 		});
 
+	});
 	});
 	});
 	});
