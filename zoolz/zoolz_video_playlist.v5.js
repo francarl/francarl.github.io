@@ -5,7 +5,6 @@ var vault = $('li[title="Vault"]');
 var machineId = vault.attr("data-value");
 var randomId = Math.floor(Math.random() * 200) + 1;
 var videoplayer = null;
-var rotated = false;
 
 
 $("head").append("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video-js.min.css' >");
@@ -74,15 +73,16 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 	              beforeElement: 'playbackRateMenuButton',
 	              textControl: 'Download video',
 	              name: 'downloadButton'
-	          },
-			  zoomrotate: { 
-				rotate: 90, 
-				zoom: 1.5
-			  } 
+	          }
 		   },
 		   playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
 		   muted: true
 		};
+
+		var zoomrotate = { 
+			rotate: 0, 
+			zoom: 1
+		  };
 
 		videoplayer = videojs('zoolz-player' + randomId, options);
 
@@ -91,19 +91,14 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 		var customRotateButton = videojs.extend(vjsButton, {
 		   constructor: function(player, options) {
 			vjsButton.call(this, player, options);
-				this.controlText("Rotate 180");
+				this.controlText("Rotate +90");
 		   },
 		   handleClick: function() {
 				//do something on click for example
 				var vi = videoplayer.children()[0];
 
-				if (rotated) {
-					vi.style.transform = 'none';
-					rotated = false;
-				} else {
-					vi.style.transform = 'rotate(180deg)';	
-					rotated = true;
-				}
+				zoomrotate.rotate += 90;
+				vi.style.transform = 'rotate(' + zoomrotate.rotate + 'deg)';	
 		   },
 		   buildCSSClass: function() {
 				return "vjs-icon-replay vjs-control vjs-button";
