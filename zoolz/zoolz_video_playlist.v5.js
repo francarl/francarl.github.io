@@ -96,7 +96,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 				var vi = videoplayer.children()[0];
 
 				zoomrotate.rotate += 90;
-				vi.style.transform = 'rotate(' + zoomrotate.rotate + 'deg)';	
+				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
 		   },
 		   buildCSSClass: function() {
 				return "vjs-icon-replay vjs-control vjs-button";
@@ -118,7 +118,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 				var vi = videoplayer.children()[0];
 
 				zoomrotate.zoom += 0.1;
-				vi.style.transform = 'scale(' + zoomrotate.zoom + ')';	
+				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
 		   },
 		   buildCSSClass: function() {
 				return "vjs-icon-circle-outline vjs-control vjs-button";
@@ -139,7 +139,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 				var vi = videoplayer.children()[0];
 
 				zoomrotate.zoom -= 0.1;
-				vi.style.transform = 'scale(' + zoomrotate.zoom + ')';	
+				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
 		   },
 		   buildCSSClass: function() {
 				return "vjs-icon-circle vjs-control vjs-button";
