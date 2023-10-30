@@ -1,5 +1,5 @@
 _pageLimit = 5000;
-
+UPLOAD_LIMIT = 1
 
 var vault = $('li[title="Vault"]');
 var machineId = vault.attr("data-value");
