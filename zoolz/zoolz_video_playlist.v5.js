@@ -44,7 +44,7 @@ $("body").append("<div id='test-popup" + randomId + "' class='player mfp-hide'> 
 //$("#controlsDiv").prepend("<a id='RefreshLink' href='javascript:void(0)' onclick='RefreshComputerFirst()' draggable='false' title='Refresh'>  <div id='RefreshButtonDiv' class='ctrlDiv ctrA'>  <div id='RefreshIn' class='icnR DownloadIcn'> </div>  <span class='LinkSpan'></span> </div> </a>");
 
 
-
+// use in chrome console: sources.map(i => i.sources[0].src) to extract all urls
 var sources = [];
 
 $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js', function () {
