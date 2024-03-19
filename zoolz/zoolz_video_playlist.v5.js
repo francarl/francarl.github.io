@@ -12,6 +12,7 @@ $("head").append("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax
 //$("head").append("<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.css' >");
 $("head").append("<link rel='stylesheet' href='https://francarl.github.io/videojs-chromecast/silvermine-videojs-chromecast.css' >");
 $("head").append("<link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.css' rel='stylesheet'>");
+$("head").append("<link href='https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>");
 
 
 $("head").append("<style>                   \
@@ -61,6 +62,8 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 
 	$.getScript('//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js', function () {	
 
+	$.getScript('https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.js', function () {	
+
 		var options = {
 		   controls: true,
 		   techOrder: [ 'chromecast', 'html5' ], // You may have more Tech, such as Flash or HLS
@@ -71,7 +74,14 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 	              beforeElement: 'playbackRateMenuButton',
 	              textControl: 'Download video',
 	              name: 'downloadButton'
-	          }
+	          },
+			  framebyframe: {
+                  fps: 30,
+			      steps: [
+			        { text: '< 1f', step: -1 },
+			        { text: '1f >', step: 1 }
+			      ]
+			  }
 		   },
 		   playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
 		   muted: true
@@ -221,6 +231,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js'
 	});
 	});
 	});
+	});	
 });
 
 
@@ -360,4 +371,3 @@ function attachVideo(newElem) {
 	}
 
 }
-
