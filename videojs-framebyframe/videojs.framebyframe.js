@@ -50,7 +50,7 @@ function framebyframe(options) {
             //player.controlBar.el().insertBefore(b.el(), fsc.el_);
             //player.controlBar.el().insertBefore(b.el(), player.controlBar.fullscreenToggle.el());
             //console.log('children', player.controlBar);
-            player.controlBar.el().insertBefore(b.el(), player.controlBar.seekBack.el());
+            //player.controlBar.el().insertBefore(b.el(), player.controlBar.seekBack.el());
         });
     });
 }
