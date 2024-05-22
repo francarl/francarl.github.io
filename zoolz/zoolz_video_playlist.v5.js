@@ -48,7 +48,7 @@ $("body").append("<div id='test-popup" + randomId + "' class='player mfp-hide'> 
 // use in chrome console: sources.map(i => i.sources[0].src) to extract all urls
 var sources = [];
 
-$.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video.min.js', function () {
+$.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js', function () {
 
 	$.getScript('https://cdn.jsdelivr.net/npm/videojs-playlist@4.3.1/dist/videojs-playlist.js', function () {
 
