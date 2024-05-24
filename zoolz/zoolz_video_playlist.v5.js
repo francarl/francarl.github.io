@@ -1,6 +1,7 @@
 _pageLimit = 5000;
 UPLOAD_LIMIT = 1
 
+
 var vault = $('li[title="Vault"]');
 var machineId = vault.attr("data-value");
 var randomId = Math.floor(Math.random() * 200) + 1;
@@ -15,21 +16,27 @@ $("head").append("<link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-
 $("head").append("<link href='https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>");
 
 
-$("head").append("<style>                   \
-	.video-js .vjs-tech {  \
-	  position: relative;  \
-	  height: inherit;     \
-	}                      \
-	.player {              \
-	  width: 80%;          \
-	  margin-left: auto;   \
-	  margin-right: auto;  \
-	  background:black;    \
-	}                      \
-	.fileDiv .ovBtns {     \
-      display: inherit !important; \
-	} \
-</style>");
+
+var newStyle = `<style>  
+	.video-js .vjs-tech {  
+	  position: relative;  
+	  height: inherit;     
+	}                      
+	.player {              
+	  width: 80%;          
+	  margin-left: auto;   
+	  margin-right: auto;  
+	  background:black;    
+	}                      
+	.fileDiv .ovBtns {     
+      display: inherit !important; 
+	} 
+    .fileDiv > div:first-child {     
+      width: 50% !important; 
+	} 				 
+</style>`;
+
+$("head").append(newStyle);
 
 
 $("body").append("<div id='test-popup" + randomId + "' class='player mfp-hide'>        \
@@ -222,6 +229,24 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
                 	 sources = [];
                 	 _refreshOriginal(isAfterSearch);
                 }
+
+				// fix name file
+				$(".fileDiv").each(function() {
+					  const linkSpan = $(this).find('.LinkSpan');
+					  if (linkSpan) {
+					    const dataFilename = $(this).data("filename");
+					    linkSpan.text(dataFilename);
+					  }
+				});
+
+				$("#viewerDiv").arrive(".fileDiv", function() {
+					  const linkSpan = $(this).find('.LinkSpan');
+					  if (linkSpan) {
+					    const dataFilename = $(this).data("filename");
+					    linkSpan.text(dataFilename);
+					  }
+				});
+				
 
 
             });
