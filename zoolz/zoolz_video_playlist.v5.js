@@ -33,7 +33,11 @@ var newStyle = `<style>
 	} 
     .fileDiv > div:first-child {     
       width: 50% !important; 
-	} 				 
+	}
+	.ovCP
+    {
+	  background: url(../MyComputers/imgs/right_click_move.png) no-repeat center center;
+    }
 </style>`;
 
 $("head").append(newStyle);
@@ -307,25 +311,44 @@ function attachVideo(newElem) {
 				});
 
 			    newElem.children("div").removeClass("ovDF").addClass("ovVI").addClass('ovSel');
-
+				
+				var aCP = $("<a href='#' title='Copy'><div class='ovCP'></div></a>");
+				aCP.attr("href", durl);
+				aCP.click(function(event){
+					event.stopPropagation();
+					var downloadUrl = $(this).attr("href");
+					navigator.clipboard.writeText(downloadUrl).then(
+					    function() {
+					      /* clipboard successfully set */
+					      window.alert('Success! The text was copied to your clipboard') 
+					    }, 
+					    function() {
+					      /* clipboard write failed */
+					      window.alert('Opps! Your browser does not support the Clipboard API')
+					    }
+					  );
+					return false;
+				});
+				newElem.parent().append(aCP);
+				
 				var ua = navigator.userAgent.toLowerCase();
 				var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 				if (isAndroid) {
 					console.log("ua: " + ua);
-
+	
 					newElem.click(function(event) {
-
+	
 						event.stopPropagation();
-
+	
 						$('.ovSel').css('border', 'none');
 						newElem.children('.ovSel').css('border', '1px solid red');
-
+	
 						var downloadUrl = newElem.attr("href");
-
+	
 						downloadUrl = downloadUrl.replace("https:", "intent:") + "#Intent;action=android.intent.action.VIEW;scheme=https;type=video/mp4;end";
-
+	
 						window.location.href = downloadUrl;
-
+	
 						return false;
 					});
 					
