@@ -14,6 +14,7 @@ $("head").append("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax
 $("head").append("<link rel='stylesheet' href='https://francarl.github.io/videojs-chromecast/silvermine-videojs-chromecast.css' >");
 $("head").append("<link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.css' rel='stylesheet'>");
 $("head").append("<link href='https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>");
+$("head").append("<link href='https://francarl.github.io/videojs-xr/dist/videojs-xr.css' rel='stylesheet'>");
 
 
 
@@ -74,6 +75,8 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 	$.getScript('//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js', function () {	
 
 	$.getScript('https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.js', function () {	
+
+	$.getScript('https://francarl.github.io/videojs-xr/dist/videojs-xr.js', function () {	
 
 		var options = {
 		   controls: true,
@@ -261,6 +264,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 	});
 	});
 	});	
+	});	
 });
 
 
@@ -272,7 +276,11 @@ function attachVideo(newElem) {
     var originalURL = newElem.attr("onclick");
 
 	var regex = /q=[\w=]+/g;
-	var m = originalURL.match(regex);
+	var m = null;
+	try {
+		m = originalURL.match(regex);
+	} catch(ex) {
+	}
 	if (m) {
 		var newUrl = "MyComputers/Download.aspx?" + m[0];
 	
@@ -302,7 +310,7 @@ function attachVideo(newElem) {
 				      }
 			    );
 
-			    console.log("new elem: " + newElem.attr("idx"));
+			    // console.log("new elem: " + newElem.attr("idx"));
 
 			    newElem.unbind('click') // takes care of jQuery-bound click events
 				.attr('onclick', '') // clears `onclick` attributes in the HTML
@@ -335,20 +343,20 @@ function attachVideo(newElem) {
 				var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 				if (isAndroid) {
 					console.log("ua: " + ua);
-	
+
 					newElem.click(function(event) {
-	
+
 						event.stopPropagation();
-	
+
 						$('.ovSel').css('border', 'none');
 						newElem.children('.ovSel').css('border', '1px solid red');
-	
+
 						var downloadUrl = newElem.attr("href");
-	
+
 						downloadUrl = downloadUrl.replace("https:", "intent:") + "#Intent;action=android.intent.action.VIEW;scheme=https;type=video/mp4;end";
-	
+
 						window.location.href = downloadUrl;
-	
+
 						return false;
 					});
 					
