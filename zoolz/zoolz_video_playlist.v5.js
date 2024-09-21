@@ -295,7 +295,9 @@ function attachVideo(newElem) {
 			},
 			success: function(data, textStatus, request){
 			    var durl = request.getResponseHeader('downloadUrl');
-			    console.log(durl);
+			    //console.log(durl);
+                            setTimeout(console.log.bind(console, durl));
+	
 			    newElem.attr("href", durl);
 
 			    sources.push(
