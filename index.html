@@ -1,14 +1,85 @@
- <html>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Carica e riproduci video con Video.js</title>
+  <link href="http://vjs.zencdn.net/7.17.5/video-js.css" rel="stylesheet">
+
+
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video-js.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css'>
+  <link rel='stylesheet'
+    href='https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.css'>
+  <link rel='stylesheet' href='https://francarl.github.io/videojs-chromecast/silvermine-videojs-chromecast.css'>
+  <link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.css' rel='stylesheet'>
+  <link href='https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>
+  <link href='https://francarl.github.io/videojs-xr/dist/videojs-xr.css' rel='stylesheet'>
+</head>
+
 <body>
-<a id="clickme" onclick="javascript:alert('ciao')" href="#">Cliccami</a>
-  <input id="disabled-click-me" type="button" disabled="disabled" value="DISABLED"/>
- <input id="enabled-click-me" type="button"  value="ENABLED"/>
- <br><br>
- <div disabled="disabled" id="disabled-div"><span>DIV DISABILITATO</span></div><br>
- <div id="enabled-div"><span>DIV ABILITATO</span></div>
- <br><br>
- <span id="store-data-ctl1">stringa da salvare</span>
- <br><br>
- <input type="text" id="store-data-ctl2" value="input da salvare" />
+  <input type="file" id="my-file-input" accept="video/*">
+
+  <video id='my-video' class='video-js vjs-default-skin' controls preload='auto' style='height:auto; width:100%'>
+    <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a
+        href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>
+  </video>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-playlist@4.3.1/dist/videojs-playlist.js"></script>
+  <script>
+    window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
+      preloadWebComponents: true,
+    };	
+  </script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.js"></script>
+  <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+  <script src="//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js"></script>
+  <script src="https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.js"></script>
+
+  <script>
+    var options = {
+      controls: true,
+      techOrder: ['chromecast', 'html5'], // You may have more Tech, such as Flash or HLS
+      plugins: {
+        chromecast: {
+        },
+        vjsdownload: {
+          beforeElement: 'playbackRateMenuButton',
+          textControl: 'Download video',
+          name: 'downloadButton'
+        },
+        framebyframe: {
+          fps: 30,
+          steps: [
+            { text: '< 1f', step: -1 },
+            { text: '1f >', step: 1 }
+          ]
+        }
+      },
+      playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
+      muted: true
+    };
+
+    var zoomrotate = {
+      rotate: 0,
+      zoom: 1
+    };
+
+    var videoplayer = videojs('my-video', options);
+
+    var input = document.getElementById('my-file-input');
+
+    input.addEventListener('change', function (event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        videoplayer.src = e.target.result;
+        videoplayer.load();
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
 </body>
+
 </html>
