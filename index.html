@@ -89,6 +89,7 @@
       var file = event.target.files[0];
       var fileURL = URL.createObjectURL(file);
       videoplayer.src = fileURL;
+      videoplayer.play();
     });
   </script>
 </body>
