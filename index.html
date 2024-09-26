@@ -13,15 +13,31 @@
   <link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.css' rel='stylesheet'>
   <link href='https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>
   <link href='https://francarl.github.io/videojs-xr/dist/videojs-xr.css' rel='stylesheet'>
+  <style>
+    .video-js .vjs-tech {
+      position: relative;
+      height: inherit;
+    }
+
+    .player {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      background: black;
+    }
+  </style>
 </head>
 
 <body>
   <input type="file" id="my-file-input" accept="video/*">
 
-  <video id='my-video' class='video-js vjs-default-skin' controls preload='auto' style='height:auto; width:100%'>
-    <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a
-        href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>
-  </video>
+  <div class="player">
+    <video id='my-video' class='video-js vjs-default-skin' controls preload='auto'
+      style='display: block; height:auto; width:100%'>
+      <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a
+          href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>
+    </video>
+  </div>
 
   <script src="//cdn.jsdelivr.net/npm/video.js@7.21.6/dist/video.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/videojs-playlist@4.3.1/dist/videojs-playlist.js"></script>
@@ -71,12 +87,8 @@
 
     input.addEventListener('change', function (event) {
       var file = event.target.files[0];
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        videoplayer.src = e.target.result;
-        videoplayer.load();
-      };
-      reader.readAsDataURL(file);
+      var fileURL = URL.createObjectURL(file);
+      videoplayer.src = fileURL;
     });
   </script>
 </body>
