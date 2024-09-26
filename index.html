@@ -88,7 +88,7 @@
     input.addEventListener('change', function (event) {
       var file = event.target.files[0];
       var fileURL = URL.createObjectURL(file);
-      videoplayer.src = fileURL;
+      videoplayer.src(fileURL);
       videoplayer.play();
     });
   </script>
