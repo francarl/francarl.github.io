@@ -87,12 +87,14 @@
 
     input.addEventListener('change', function (event) {
       var file = event.target.files[0];
-      var fileURL = URL.createObjectURL(file);
-      videoplayer.src({
-        type: 'video/mp4',
-        src: fileURL
-      });
-      videoplayer.play();
+      if (file) {
+        var fileURL = URL.createObjectURL(file);
+        videoplayer.src({
+          type: file.type,
+          src: fileURL
+        });
+        videoplayer.play();
+      }
     });
   </script>
 </body>
