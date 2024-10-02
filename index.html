@@ -195,7 +195,7 @@
       var sources = [];
 
       if (files) {
-        files.array.forEach((file, index) => {
+        Array.from(files).forEach((file, index) => {
           sources.push(
             {
               sources: [{
