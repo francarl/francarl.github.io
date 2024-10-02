@@ -215,7 +215,7 @@
 
     videoplayer.on('playlistitem', function (event) {
       var curIdx = videoplayer.playlist.currentIndex();
-      var curName = videoplayer.sources[curIdx].name;
+      var curName = videoplayer.playlist.currentItem();
       console.log(curName);
     });
   </script>
