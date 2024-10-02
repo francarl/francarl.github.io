@@ -211,6 +211,10 @@
         videoplayer.play();
       }
     });
+
+    videoplayer.addEventListener('play', function (event) {
+      console.log(event);
+    });
   </script>
 </body>
 
