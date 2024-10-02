@@ -202,7 +202,8 @@
                 src: URL.createObjectURL(file),
                 type: file.type
               }],
-              idx: index
+              idx: index,
+              name: file.name
             }
           );
         });
@@ -213,7 +214,9 @@
     });
 
     videoplayer.on('playlistitem', function (event) {
-      console.log(event);
+      var curIdx = videoplayer.playlist.currentIndex();
+      var curName = videoplayer.sources[curIdx].name;
+      console.log(curName);
     });
   </script>
 </body>
