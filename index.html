@@ -29,7 +29,7 @@
 </head>
 
 <body>
-  <input type="file" id="my-file-input" accept="video/*" style="width: 800px;">
+  <input type="file" id="my-file-input" accept="video/*" style="width: 800px;" multiple="multiple">
 
   <div class="player">
     <video id='my-video' class='video-js vjs-default-skin' controls preload='auto'
@@ -84,86 +84,130 @@
     var videoplayer = videojs('my-video', options);
 
     // rotate
-		var vjsButton = videojs.getComponent("Button");
-		var customRotateButton = videojs.extend(vjsButton, {
-		   constructor: function(player, options) {
-			vjsButton.call(this, player, options);
-				this.controlText("Rotate +90");
-		   },
-		   handleClick: function() {
-				//do something on click for example
-				var vi = videoplayer.children()[0];
-				var poster = videoplayer.el_; // div vjs-poster
+    var vjsButton = videojs.getComponent("Button");
+    var customRotateButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Rotate +90");
+      },
+      handleClick: function () {
+        //do something on click for example
+        var vi = videoplayer.children()[0];
+        var poster = videoplayer.el_; // div vjs-poster
 
-				zoomrotate.rotate += 90;
-				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-				// poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-		   },
-		   buildCSSClass: function() {
-				return "vjs-icon-replay vjs-control vjs-button";
-		   }
-		});
-		videojs.registerComponent("customRotateButton", customRotateButton);
-		videoplayer.getChild("controlBar").addChild("customRotateButton", {});
+        zoomrotate.rotate += 90;
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-replay vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customRotateButton", customRotateButton);
+    videoplayer.getChild("controlBar").addChild("customRotateButton", {});
 
 
-		// zoom out
-		var vjsButton = videojs.getComponent("Button");
-		var customZoomoutButton = videojs.extend(vjsButton, {
-		   constructor: function(player, options) {
-			vjsButton.call(this, player, options);
-				this.controlText("Zoom out");
-		   },
-		   handleClick: function() {
-				//do something on click for example
-				var vi = videoplayer.children()[0];
-				var poster = videoplayer.el_; // div vjs-poster
+    // zoom out
+    var vjsButton = videojs.getComponent("Button");
+    var customZoomoutButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Zoom out");
+      },
+      handleClick: function () {
+        //do something on click for example
+        var vi = videoplayer.children()[0];
+        var poster = videoplayer.el_; // div vjs-poster
 
-				zoomrotate.zoom += 0.1;
-				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-				// poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-		   },
-		   buildCSSClass: function() {
-				return "vjs-icon-circle-outline vjs-control vjs-button";
-		   }
-		});
-		videojs.registerComponent("customZoomoutButton", customZoomoutButton);
-		videoplayer.getChild("controlBar").addChild("customZoomoutButton", {});
+        zoomrotate.zoom += 0.1;
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-circle-outline vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customZoomoutButton", customZoomoutButton);
+    videoplayer.getChild("controlBar").addChild("customZoomoutButton", {});
 
-		// zoom in
-		var vjsButton = videojs.getComponent("Button");
-		var customZoominButton = videojs.extend(vjsButton, {
-		   constructor: function(player, options) {
-			vjsButton.call(this, player, options);
-				this.controlText("Zoom in");
-		   },
-		   handleClick: function() {
-				//do something on click for example
-				var vi = videoplayer.children()[0];
-				var poster = videoplayer.el_; // div vjs-poster
+    // zoom in
+    var vjsButton = videojs.getComponent("Button");
+    var customZoominButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Zoom in");
+      },
+      handleClick: function () {
+        //do something on click for example
+        var vi = videoplayer.children()[0];
+        var poster = videoplayer.el_; // div vjs-poster
 
-				zoomrotate.zoom -= 0.1;
-				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-				// poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-		   },
-		   buildCSSClass: function() {
-				return "vjs-icon-circle vjs-control vjs-button";
-		   }
-		});
-		videojs.registerComponent("customZoominButton", customZoominButton);
-		videoplayer.getChild("controlBar").addChild("customZoominButton", {});
+        zoomrotate.zoom -= 0.1;
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-circle vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customZoominButton", customZoominButton);
+    videoplayer.getChild("controlBar").addChild("customZoominButton", {});
 
+    // prev 
+    var customPrevButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Prev");
+      },
+      handleClick: function () {
+        videoplayer.playlist.previous();
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-previous-item vjs-control vjs-button";
+      }
+    });
+
+    videojs.registerComponent("customPrevButton", customPrevButton);
+    videoplayer.getChild("controlBar").addChild("customPrevButton", {});
+
+    // next 
+    var customNextButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Next");
+      },
+      handleClick: function () {
+        videoplayer.playlist.next();
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-next-item vjs-control vjs-button";
+      }
+    });
+
+    videojs.registerComponent("customNextButton", customNextButton);
+    videoplayer.getChild("controlBar").addChild("customNextButton", {});
 
     var input = document.getElementById('my-file-input');
-
+    
     input.addEventListener('change', function (event) {
-      var file = event.target.files[0];
-      if (file) {
-        var fileURL = URL.createObjectURL(file);
-        videoplayer.src({
-          type: file.type,
-          src: fileURL
+      var files = event.target.files;
+
+      var sources = [];
+
+      if (files) {
+        files.array.forEach((file, index) => {
+          sources.push(
+            {
+              sources: [{
+                src: URL.createObjectURL(file),
+                type: file.type
+              }],
+              idx: index
+            }
+          );
         });
+
+        videoplayer.playlist(sources);
         videoplayer.play();
       }
     });
