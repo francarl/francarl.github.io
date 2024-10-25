@@ -37,6 +37,7 @@
       <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a
           href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>
     </video>
+    <span id="current-item-title"></span>
   </div>
 
   <script src="//cdn.jsdelivr.net/npm/video.js@7.21.6/dist/video.min.js"></script>
@@ -188,7 +189,7 @@
     videoplayer.getChild("controlBar").addChild("customNextButton", {});
 
     var input = document.getElementById('my-file-input');
-    
+
     input.addEventListener('change', function (event) {
       var files = event.target.files;
 
@@ -200,7 +201,8 @@
             {
               sources: [{
                 src: URL.createObjectURL(file),
-                type: file.type
+                type: file.type,
+                title: file.name
               }],
               idx: index,
               name: file.name
@@ -214,9 +216,9 @@
     });
 
     videoplayer.on('playlistitem', function (event) {
-      var curIdx = videoplayer.playlist.currentIndex();
-      var curName = videoplayer.playlist.currentItem();
-      console.log(curName);
+      const currentItem = videoplayer.currentSource();
+      const titleDisplay = document.getElementById('current-item-title');
+      titleDisplay.textContent = decodeURIComponent(currentItem.title);
     });
   </script>
 </body>
