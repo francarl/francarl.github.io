@@ -50,6 +50,7 @@ $("body").append("<div id='test-popup" + randomId + "' class='player mfp-hide'> 
       >      \
         <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>  \
     </video>    \
+	<span id=\"current-item-title\" style=\"color: white;\"></span>  \
 </div>");
 
 // data-setup='{ \"playbackRates\": [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0] }'
@@ -213,6 +214,13 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 		videojs.registerComponent("customNextButton", customNextButton);
 		videoplayer.getChild("controlBar").addChild("customNextButton", {});
 
+		videoplayer.on('playlistitem', () => {
+		    const currentItem = videoplayer.currentSource();
+		    const titleDisplay = document.getElementById('current-item-title');
+		    titleDisplay.textContent = decodeURIComponent(currentItem.title);
+		  });
+		
+
 		$.getScript('https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js', function () {
 
             $.getScript("https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js", function() {
@@ -276,6 +284,7 @@ function attachVideo(newElem) {
     var originalURL = newElem.attr("onclick");
 
 	var regex = /q=[\w=]+/g;
+	var titleRegex = /filename%3D%22(.+)%22/
 	var m = null;
 	try {
 		m = originalURL.match(regex);
@@ -300,13 +309,15 @@ function attachVideo(newElem) {
 	
 			    newElem.attr("href", durl);
 
+				var title = durl.match(titleRegex)[1];
+
 			    sources.push(
 				     {
 					  sources: [{
 					    src: durl,
-					    type: 'video/mp4'
+					    type: 'video/mp4',
+						title: decodeURIComponent(title)
 					  }],
-					  //,poster: 'http://media.w3.org/2010/05/bunny/poster.png'
 					  idx: newElem.attr("idx"),
 					  obj: newElem
 				      }
