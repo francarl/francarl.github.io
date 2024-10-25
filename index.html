@@ -200,7 +200,7 @@
             {
               sources: [{
                 src: URL.createObjectURL(file),
-                type: file.type,
+                type: (file.type === "video/x-matroska") ? "video/mp4" : file.type,
                 title: file.name
               }],
               idx: index,
