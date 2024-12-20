@@ -79,6 +79,8 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 
 	$.getScript('https://francarl.github.io/videojs-xr/dist/videojs-xr.js', function () {	
 
+	$.getScript('https://unpkg.com/hotkeys-js/dist/hotkeys.min.js', function () {	
+
 		var options = {
 		   controls: true,
 		   techOrder: [ 'chromecast', 'html5' ], // You may have more Tech, such as Flash or HLS
@@ -105,7 +107,26 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 		var zoomrotate = { 
 			rotate: 0, 
 			zoom: 1
-		  };
+		};
+
+		hotkeys('alt+r,alt+z,alt+x', function (event, handler){
+		  	var vi = videoplayer.children()[0];
+			switch (handler.key) {
+			    case 'alt+r':
+					zoomrotate.rotate += 90;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+				    break;
+				case 'alt+z':
+					zoomrotate.zoom += 0.1;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+					break;
+				case 'alt+x':
+					zoomrotate.zoom -= 0.1;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';		
+					break;
+			    default: 
+			  }
+		});
 
 		videoplayer = videojs('zoolz-player' + randomId, options);
 
@@ -119,7 +140,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 		   handleClick: function() {
 				//do something on click for example
 				var vi = videoplayer.children()[0];
-				var poster = videoplayer.el_; // div vjs-poster
+				// var poster = videoplayer.el_; // div vjs-poster
 
 				zoomrotate.rotate += 90;
 				vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
@@ -271,6 +292,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 	});
 	});
 	});
+	});	
 	});	
 	});	
 });
