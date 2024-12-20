@@ -51,6 +51,7 @@
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
   <script src="//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js"></script>
   <script src="https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.js"></script>
+  <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
 
   <script>
     var options = {
@@ -80,6 +81,25 @@
       rotate: 0,
       zoom: 1
     };
+
+    hotkeys('alt+r,alt+z,alt+x', function (event, handler) {
+		  	var vi = videoplayer.children()[0];
+			  switch (handler.key) {
+			    case 'alt+r':
+  					zoomrotate.rotate += 90;
+  					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+				    break;
+				  case 'alt+z':
+  					zoomrotate.zoom += 0.1;
+  					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+  					break;
+				  case 'alt+x':
+  					zoomrotate.zoom -= 0.1;
+  					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';		
+  					break;
+			    default: 
+			  }
+		});
 
     var videoplayer = videojs('my-video', options);
 
