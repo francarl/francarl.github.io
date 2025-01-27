@@ -93,7 +93,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 	              name: 'downloadButton'
 	          },
 			  framebyframe: {
-                  fps: 30,
+                  fps: 60,
 			      steps: [
 			        { text: '< 1f', step: -1 },
 			        { text: '1f >', step: 1 }
@@ -109,7 +109,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 			zoom: 1
 		};
 
-		hotkeys('alt+r,alt+z,alt+x', function (event, handler){
+		hotkeys('alt+r,alt+z,alt+x,left,right', function (event, handler){
 		  	var vi = videoplayer.children()[0];
 			switch (handler.key) {
 			    case 'alt+r':
@@ -123,6 +123,14 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 				case 'alt+x':
 					zoomrotate.zoom -= 0.1;
 					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';		
+					break;
+				case 'left':
+					videoplayer.currentTime(videoplayer.currentTime() - 10);
+					videoplayer.play();
+					break;
+				case 'right':
+					videoplayer.currentTime(videoplayer.currentTime() + 10);
+					videoplayer.play();
 					break;
 			    default: 
 			  }
