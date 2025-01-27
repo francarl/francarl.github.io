@@ -82,21 +82,29 @@
       zoom: 1
     };
 
-    hotkeys('alt+r,alt+z,alt+x', function (event, handler) {
+	hotkeys('alt+r,alt+z,alt+x,left,right', function (event, handler){
 		  	var vi = videoplayer.children()[0];
-			  switch (handler.key) {
+			switch (handler.key) {
 			    case 'alt+r':
-  					zoomrotate.rotate += 90;
-  					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+					zoomrotate.rotate += 90;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
 				    break;
-				  case 'alt+z':
-  					zoomrotate.zoom += 0.1;
-  					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
-  					break;
-				  case 'alt+x':
-  					zoomrotate.zoom -= 0.1;
-  					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';		
-  					break;
+				case 'alt+z':
+					zoomrotate.zoom += 0.1;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+					break;
+				case 'alt+x':
+					zoomrotate.zoom -= 0.1;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';		
+					break;
+				case 'left':
+					videoplayer.currentTime(videoplayer.currentTime() - 10);
+					videoplayer.play();
+					break;
+				case 'right':
+					videoplayer.currentTime(videoplayer.currentTime() + 10);
+					videoplayer.play();
+					break;
 			    default: 
 			  }
 		});
