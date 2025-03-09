@@ -334,12 +334,12 @@ function attachVideo(newElem) {
 			},
 			success: function(data, textStatus, request){
 			    var durl = request.getResponseHeader('downloadUrl');
-			    //console.log(durl);
-                            setTimeout(console.log.bind(console, durl));
+			    // setTimeout(console.log.bind(console, durl));
 	
 			    newElem.attr("href", durl);
 
-				var title = durl.match(titleRegex)[1];
+			    var title = durl.match(titleRegex)[1];
+			    setTimeout(console.log.bind(console, title));	
 
 			    sources.push(
 				     {
