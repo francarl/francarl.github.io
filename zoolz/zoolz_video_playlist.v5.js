@@ -109,7 +109,7 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 			zoom: 1
 		};
 
-		hotkeys('alt+r,alt+z,alt+x,n,m', function (event, handler){
+		hotkeys('alt+r,alt+z,alt+x,n,m,k,l', function (event, handler){
 		  	var vi = videoplayer.children()[0];
 			switch (handler.key) {
 			    case 'alt+r':
@@ -132,6 +132,16 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 					videoplayer.currentTime(videoplayer.currentTime() + 10);
 					videoplayer.play();
 					break;
+				case 'k':
+					videoplayer.pause();
+					var dist = -1/60;
+					videoplayer.currentTime(videoplayer.currentTime() + dist);
+					break;
+				case 'l':
+					videoplayer.pause();
+					var dist = 1/60;
+					videoplayer.currentTime(videoplayer.currentTime() + dist);
+					break;	
 			    default: 
 			  }
 		});
@@ -338,8 +348,8 @@ function attachVideo(newElem) {
 	
 			    newElem.attr("href", durl);
 
-			    var title = durl.match(titleRegex)[1];
-			    setTimeout(console.log.bind(console, title));	
+				var title = durl.match(titleRegex)[1];
+				setTimeout(console.log.bind(console, title));
 
 			    sources.push(
 				     {
