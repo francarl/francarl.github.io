@@ -8,13 +8,12 @@ var randomId = Math.floor(Math.random() * 200) + 1;
 var videoplayer = null;
 
 
-$("head").append("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video-js.min.css' >");
-$("head").append("<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css' >");
-//$("head").append("<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.css' >");
-$("head").append("<link rel='stylesheet' href='https://francarl.github.io/videojs-chromecast/silvermine-videojs-chromecast.css' >");
-$("head").append("<link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.css' rel='stylesheet'>");
-$("head").append("<link href='https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>");
-$("head").append("<link href='https://francarl.github.io/videojs-xr/dist/videojs-xr.css' rel='stylesheet'>");
+$("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs/video-js.min.css' rel='stylesheet' >");
+$("head").append("<link href='https://francarl.github.io/zoolz/lib/magnific-popup/magnific-popup.css' rel='stylesheet'  >");
+$("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-chromecast/silvermine-videojs-chromecast.css' rel='stylesheet' >");
+$("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-vjsdownload/videojs-vjsdownload.css' rel='stylesheet'>");
+$("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>");
+$("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-xr/videojs-xr.css' rel='stylesheet'>");
 
 
 
@@ -61,25 +60,25 @@ $("body").append("<div id='test-popup" + randomId + "' class='player mfp-hide'> 
 // use in chrome console: sources.map(i => i.sources[0].src) to extract all urls
 var sources = [];
 
-$.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js', function () {
+$.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', function () {
 
-	$.getScript('https://cdn.jsdelivr.net/npm/videojs-playlist@4.3.1/dist/videojs-playlist.js', function () {
+	$.getScript('https://francarl.github.io/zoolz/lib/videojs/videojs-playlist.js', function () {
 
     window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
         preloadWebComponents: true,
     };	
 
-	$.getScript('https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.js', function () {
+	$.getScript('https://francarl.github.io/zoolz/lib/videojs-chromecast/silvermine-videojs-chromecast.js', function () {
 
 	$.getScript('https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1', function () {
 
-	$.getScript('//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js', function () {	
+	$.getScript('https://francarl.github.io/zoolz/lib/videojs-vjsdownload/videojs-vjsdownload.js', function () {	
 
-	$.getScript('https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.js', function () {	
+	$.getScript('https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.js', function () {	
 
-	$.getScript('https://francarl.github.io/videojs-xr/dist/videojs-xr.js', function () {	
+	$.getScript('https://francarl.github.io/zoolz/lib/videojs-xr/videojs-xr.js', function () {	
 
-	$.getScript('https://unpkg.com/hotkeys-js/dist/hotkeys.min.js', function () {	
+	$.getScript('https://francarl.github.io/zoolz/lib/videojs/hotkeys.min.js', function () {	
 
 		var options = {
 		   controls: true,
@@ -260,9 +259,9 @@ $.getScript('https://cdnjs.cloudflare.com/ajax/libs/video.js/7.21.1/video.min.js
 		  });
 		
 
-		$.getScript('https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js', function () {
+		$.getScript('https://francarl.github.io/zoolz/lib/magnific-popup/jquery.magnific-popup.js', function () {
 
-            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/arrive/2.4.1/arrive.min.js", function() {
+            $.getScript("https://francarl.github.io/zoolz/lib/videojs/arrive.min.js", function() {
 
 
 				$("#viewerDiv .ovBtns > a").each(function() {

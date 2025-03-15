@@ -1,0 +1,8 @@
+/**
+* videojs-vjsdownload
+* @author 7Ds7
+* @version 2.0.1
+* @url https://github.com/7Ds7/videojs-vjsdownload.git
+* Copyright 2024 Apache-2.0 licensed.
+*/
+.video-js.vjs-download .vjs-button.vjs-download{cursor:pointer;display:block;font-family:VideoJs;font-size:inherit}.video-js.vjs-download .vjs-button.vjs-download .vjs-icon-placeholder{display:block;margin:0 auto;width:11px;height:11px;clip-path:polygon(50% 100%,2% 46%,32% 46%,32% 0%,67.6% 0%,67.6% 46%,98% 46%,50% 100%);background-color:#fff}
