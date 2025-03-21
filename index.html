@@ -4,15 +4,13 @@
 <head>
   <title>Carica e riproduci video con Video.js</title>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.21.6/dist/video-js.min.css">
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/video.js/7.1.0/video-js.min.css'>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css'>
-  <link rel='stylesheet'
-    href='https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.css'>
+  <link rel="stylesheet" href="https://francarl.github.io/zoolz/lib/videojs/video-js.min.css">
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/magnific-popup/magnific-popup.css'>
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-chromecast/silvermine-videojs-chromecast.css'>
   <link rel='stylesheet' href='https://francarl.github.io/videojs-chromecast/silvermine-videojs-chromecast.css'>
-  <link href='//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.css' rel='stylesheet'>
-  <link href='https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>
-  <link href='https://francarl.github.io/videojs-xr/dist/videojs-xr.css' rel='stylesheet'>
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-vjsdownload/videojs-vjsdownload.css' >
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.css' >
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-xr/videojs-xr.css' >
   <style>
     .video-js .vjs-tech {
       position: relative;
@@ -39,19 +37,19 @@
     </video>
   </div>
   <span id="current-item-title"></span>
-  <script src="//cdn.jsdelivr.net/npm/video.js@7.21.6/dist/video.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/videojs-playlist@4.3.1/dist/videojs-playlist.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs/video.min.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs/videojs-playlist.js"></script>
   <script>
     window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
       preloadWebComponents: true,
     };	
   </script>
   <script
-    src="https://cdn.jsdelivr.net/npm/@silvermine/videojs-chromecast@1.2.1/dist/silvermine-videojs-chromecast.js"></script>
+    src="https://francarl.github.io/zoolz/lib/videojs-chromecast/silvermine-videojs-chromecast.js"></script>
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
-  <script src="//7ds7.github.io/videojs-vjsdownload/dist/videojs-vjsdownload.js"></script>
-  <script src="https://francarl.github.io/videojs-framebyframe/videojs.framebyframe.js"></script>
-  <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs-vjsdownload/videojs-vjsdownload.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs/hotkeys.min.js"></script>
 
   <script>
     var options = {
@@ -74,7 +72,10 @@
         }
       },
       playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
-      muted: true
+      muted: true,
+      controlBar: {
+	pictureInPictureToggle: false
+      }
     };
 
     var zoomrotate = {
@@ -82,7 +83,7 @@
       zoom: 1
     };
 
-	hotkeys('alt+r,alt+z,alt+x,n,m', function (event, handler){
+	hotkeys('alt+r,alt+z,alt+x,n,m,k,l', function (event, handler){
 		  	var vi = videoplayer.children()[0];
 			switch (handler.key) {
 			    case 'alt+r':
@@ -105,10 +106,21 @@
 					videoplayer.currentTime(videoplayer.currentTime() + 10);
 					videoplayer.play();
 					break;
+				case 'k':
+					videoplayer.pause();
+					var dist = -1/60;
+					videoplayer.currentTime(videoplayer.currentTime() + dist);
+					break;
+				case 'l':
+					videoplayer.pause();
+					var dist = 1/60;
+					videoplayer.currentTime(videoplayer.currentTime() + dist);
+					break;						
 			    default: 
 			  }
 		});
 
+    var autoAdvance = false;
     var videoplayer = videojs('my-video', options);
 
     // rotate
@@ -214,6 +226,28 @@
 
     videojs.registerComponent("customNextButton", customNextButton);
     videoplayer.getChild("controlBar").addChild("customNextButton", {});
+
+    // toggle autoadvance 
+    var toggleAutoAdvanceButton = videojs.extend(vjsButton, {
+	   constructor: function(player, options) {
+			vjsButton.call(this, player, options);
+			this.controlText("Autoadvance OFF");
+	   },
+	   handleClick: function() {
+		   autoAdvance = !autoAdvance;
+		   if (autoAdvance) {
+				videoplayer.playlist.autoadvance(0);
+		   } else {
+			   videoplayer.playlist.autoadvance();
+		   }
+		   this.controlText("Autoadvance " + (autoAdvance ? "ON" : "OFF"));
+	   },
+	   buildCSSClass: function() {
+			return "vjs-icon-audio-description vjs-control vjs-button";
+	   }
+	});
+    videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
+    videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
 
     var input = document.getElementById('my-file-input');
 
