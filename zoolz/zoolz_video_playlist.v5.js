@@ -60,6 +60,8 @@ $("body").append("<div id='test-popup" + randomId + "' class='player mfp-hide'> 
 // use in chrome console: sources.map(i => i.sources[0].src) to extract all urls
 var sources = [];
 
+var autoAdvance = false;
+
 $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', function () {
 
 	$.getScript('https://francarl.github.io/zoolz/lib/videojs/videojs-playlist.js', function () {
@@ -102,8 +104,8 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 		   playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
 		   muted: true,
 		   controlBar: {
-                       pictureInPictureToggle: false
-                   }
+		       pictureInPictureToggle: false
+		   }
 		};
 
 		var zoomrotate = { 
@@ -220,7 +222,6 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 		videojs.registerComponent("customZoominButton", customZoominButton);
 		videoplayer.getChild("controlBar").addChild("customZoominButton", {});
 
-
         // prev 
         var customPrevButton = videojs.extend(vjsButton, {
 		   constructor: function(player, options) {
@@ -255,12 +256,34 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 		videojs.registerComponent("customNextButton", customNextButton);
 		videoplayer.getChild("controlBar").addChild("customNextButton", {});
 
+		 // toggle autoadvance 
+        var toggleAutoAdvanceButton = videojs.extend(vjsButton, {
+		   constructor: function(player, options) {
+				vjsButton.call(this, player, options);
+				this.controlText("Autoadvance OFF");
+		   },
+		   handleClick: function() {
+			   autoAdvance = !autoAdvance;
+			   if (autoAdvance) {
+					videoplayer.playlist.autoadvance(0);
+			   } else {
+				   videoplayer.playlist.autoadvance();
+			   }
+			   this.controlText("Autoadvance " + (autoAdvance ? "ON" : "OFF"));
+		   },
+		   buildCSSClass: function() {
+				return "vjs-icon-audio-description vjs-control vjs-button";
+		   }
+		});
+
+		videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
+		videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});
+
 		videoplayer.on('playlistitem', () => {
 		    const currentItem = videoplayer.currentSource();
 		    const titleDisplay = document.getElementById('current-item-title');
 		    titleDisplay.textContent = decodeURIComponent(currentItem.title);
 		  });
-		
 
 		$.getScript('https://francarl.github.io/zoolz/lib/magnific-popup/jquery.magnific-popup.js', function () {
 
