@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Carica e riproduci video con Video.js</title>
+
+  <link rel="stylesheet" href="https://francarl.github.io/zoolz/lib/videojs/video-js.min.css">
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/magnific-popup/magnific-popup.css'>
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-chromecast/silvermine-videojs-chromecast.css'>
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-chromecast/silvermine-videojs-chromecast.css'>
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-vjsdownload/videojs-vjsdownload.css' >
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.css' >
+  <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-xr/videojs-xr.css' >
+  <style>
+    .video-js .vjs-tech {
+      position: relative;
+      height: inherit;
+    }
+
+    .player {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      background: black;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="file" id="my-file-input" accept="video/*" style="width: 800px;" multiple="multiple">
+
+  <div class="player">
+    <video id='my-video' class='video-js vjs-default-skin' controls preload='auto'
+      style='display: block; height:auto; width:100%'>
+      <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a
+          href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>
+    </video>
+  </div>
+  <span id="current-item-title"></span>
+  <script src="https://francarl.github.io/zoolz/lib/videojs/video.min.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs/videojs-playlist.js"></script>
+  <script>
+    window.SILVERMINE_VIDEOJS_CHROMECAST_CONFIG = {
+      preloadWebComponents: true,
+    };	
+  </script>
+  <script
+    src="https://francarl.github.io/zoolz/lib/videojs-chromecast/silvermine-videojs-chromecast.js"></script>
+  <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs-vjsdownload/videojs-vjsdownload.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs/hotkeys.min.js"></script>
+  <script src="https://francarl.github.io/zoolz/lib/videojs-xr/videojs-xr.js"></script>
+
+  <script>
+    var options = {
+      controls: true,
+      techOrder: ['chromecast', 'html5'], // You may have more Tech, such as Flash or HLS
+      plugins: {
+        chromecast: {
+        },
+        vjsdownload: {
+          beforeElement: 'playbackRateMenuButton',
+          textControl: 'Download video',
+          name: 'downloadButton'
+        },
+        framebyframe: {
+          fps: 30,
+          steps: [
+            { text: '< 1f', step: -1 },
+            { text: '1f >', step: 1 }
+          ]
+        }
+      },
+      playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
+      muted: true,
+      controlBar: {
+	pictureInPictureToggle: false
+      }
+    };
+
+    var zoomrotate = {
+      rotate: 0,
+      zoom: 1
+    };
+
+	hotkeys('alt+r,alt+z,alt+x,n,m,k,l', function (event, handler){
+		  	var vi = videoplayer.children()[0];
+			switch (handler.key) {
+			    case 'alt+r':
+					zoomrotate.rotate += 90;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+				    break;
+				case 'alt+z':
+					zoomrotate.zoom += 0.1;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+					break;
+				case 'alt+x':
+					zoomrotate.zoom -= 0.1;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';		
+					break;
+				case 'n':
+					videoplayer.currentTime(videoplayer.currentTime() - 10);
+					videoplayer.xr();
+					break;
+				case 'm':
+					videoplayer.currentTime(videoplayer.currentTime() + 10);
+					videoplayer.xr();
+					break;
+				case 'k':
+					videoplayer.pause();
+					var dist = -1/60;
+					videoplayer.currentTime(videoplayer.currentTime() + dist);
+					break;
+				case 'l':
+					videoplayer.pause();
+					var dist = 1/60;
+					videoplayer.currentTime(videoplayer.currentTime() + dist);
+					break;						
+			    default: 
+			  }
+		});
+
+    var autoAdvance = false;
+    var videoplayer = videojs('my-video', options);
+
+    // rotate
+    var vjsButton = videojs.getComponent("Button");
+    var customRotateButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Rotate +90");
+      },
+      handleClick: function () {
+        //do something on click for example
+        var vi = videoplayer.children()[0];
+        var poster = videoplayer.el_; // div vjs-poster
+
+        zoomrotate.rotate += 90;
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-replay vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customRotateButton", customRotateButton);
+    videoplayer.getChild("controlBar").addChild("customRotateButton", {});
+
+
+    // zoom out
+    var vjsButton = videojs.getComponent("Button");
+    var customZoomoutButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Zoom out");
+      },
+      handleClick: function () {
+        //do something on click for example
+        var vi = videoplayer.children()[0];
+        var poster = videoplayer.el_; // div vjs-poster
+
+        zoomrotate.zoom += 0.1;
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-circle-outline vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customZoomoutButton", customZoomoutButton);
+    videoplayer.getChild("controlBar").addChild("customZoomoutButton", {});
+
+    // zoom in
+    var vjsButton = videojs.getComponent("Button");
+    var customZoominButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Zoom in");
+      },
+      handleClick: function () {
+        //do something on click for example
+        var vi = videoplayer.children()[0];
+        var poster = videoplayer.el_; // div vjs-poster
+
+        zoomrotate.zoom -= 0.1;
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-circle vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customZoominButton", customZoominButton);
+    videoplayer.getChild("controlBar").addChild("customZoominButton", {});
+
+    // prev 
+    var customPrevButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Prev");
+      },
+      handleClick: function () {
+        videoplayer.playlist.previous();
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-previous-item vjs-control vjs-button";
+      }
+    });
+
+    videojs.registerComponent("customPrevButton", customPrevButton);
+    videoplayer.getChild("controlBar").addChild("customPrevButton", {});
+
+    // next 
+    var customNextButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Next");
+      },
+      handleClick: function () {
+        videoplayer.playlist.next();
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-next-item vjs-control vjs-button";
+      }
+    });
+
+    videojs.registerComponent("customNextButton", customNextButton);
+    videoplayer.getChild("controlBar").addChild("customNextButton", {});
+
+    // toggle autoadvance 
+    var toggleAutoAdvanceButton = videojs.extend(vjsButton, {
+	   constructor: function(player, options) {
+			vjsButton.call(this, player, options);
+			this.controlText("Autoadvance OFF");
+	   },
+	   handleClick: function() {
+		   autoAdvance = !autoAdvance;
+		   if (autoAdvance) {
+				videoplayer.playlist.autoadvance(0);
+		   } else {
+			   videoplayer.playlist.autoadvance();
+		   }
+		   this.controlText("Autoadvance " + (autoAdvance ? "ON" : "OFF"));
+	   },
+	   buildCSSClass: function() {
+			return "vjs-icon-audio-description vjs-control vjs-button";
+	   }
+	});
+    videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
+    videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
+
+    var input = document.getElementById('my-file-input');
+
+    input.addEventListener('change', function (event) {
+      var files = event.target.files;
+
+      var sources = [];
+
+      if (files) {
+        Array.from(files).forEach((file, index) => {
+          sources.push(
+            {
+              sources: [{
+                src: URL.createObjectURL(file),
+                type: (file.type === "video/x-matroska") ? "video/mp4" : file.type,
+                title: file.name
+              }],
+              idx: index,
+              name: file.name
+            }
+          );
+        });
+
+        videoplayer.playlist(sources);
+        videoplayer.xr();
+      }
+    });
+
+    videoplayer.on('playlistitem', function (event) {
+      const currentItem = videoplayer.currentSource();
+      const titleDisplay = document.getElementById('current-item-title');
+      titleDisplay.textContent = decodeURIComponent(currentItem.title);
+    });
+  </script>
+</body>
+
+</html>
