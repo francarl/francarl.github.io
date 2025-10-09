@@ -250,6 +250,15 @@
     videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
     videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
 
+
+    var zoomPlugin = videoplayer.zoomPlugin({
+      showZoom: true,
+      showMove: true,
+      showRotate: true,
+      gestureHandler: true
+    });
+    zoomPlugin.enablePlugin();
+
     var input = document.getElementById('my-file-input');
 
     input.addEventListener('change', function (event) {
