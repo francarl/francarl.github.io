@@ -14,6 +14,7 @@ $("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-chrom
 $("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-vjsdownload/videojs-vjsdownload.css' rel='stylesheet'>");
 $("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.css' rel='stylesheet'>");
 $("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-xr/videojs-xr.css' rel='stylesheet'>");
+$("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-zoom/videojs-zoom.css' rel='stylesheet'>");
 
 
 
@@ -81,6 +82,8 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 	$.getScript('https://francarl.github.io/zoolz/lib/videojs-xr/videojs-xr.js', function () {	
 
 	$.getScript('https://francarl.github.io/zoolz/lib/videojs/hotkeys.min.js', function () {	
+
+	$.getScript('https://francarl.github.io/zoolz/lib/videojs-zoom/videojs-zoom.js', function () {	
 
 		var options = {
 		   controls: true,
@@ -285,6 +288,14 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 		    titleDisplay.textContent = decodeURIComponent(currentItem.title);
 		  });
 
+		var zoomPlugin = videoplayer.zoomPlugin({
+			showZoom: true,
+			showMove: true,
+			showRotate: true,
+			gestureHandler: true
+		});
+		zoomPlugin.enablePlugin();
+
 		$.getScript('https://francarl.github.io/zoolz/lib/magnific-popup/jquery.magnific-popup.js', function () {
 
             $.getScript("https://francarl.github.io/zoolz/lib/videojs/arrive.min.js", function() {
@@ -338,6 +349,7 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 	});	
 	});	
 	});	
+});
 });
 
 
