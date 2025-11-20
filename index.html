@@ -12,16 +12,15 @@
   <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-framebyframe/videojs.framebyframe.css' >
   <link rel='stylesheet' href='https://francarl.github.io/zoolz/lib/videojs-zoom/videojs-zoom.css' >
   <style>
-    .video-js .vjs-tech {
-      position: relative;
-      height: inherit;
-    }
-
     .player {
       width: 80%;
       margin-left: auto;
       margin-right: auto;
       background: black;
+    }
+
+    .video-js .vjs-tech.rotated-270 {
+      transform: rotate(-90deg) scale(calc(16 / 9)) !important;
     }
   </style>
 </head>
@@ -30,8 +29,7 @@
   <input type="file" id="my-file-input" accept="video/*" style="width: 800px;" multiple="multiple">
 
   <div class="player">
-    <video id='my-video' class='video-js vjs-default-skin' controls preload='auto'
-      style='display: block; height:auto; width:100%'>
+    <video id='my-video' class='video-js vjs-default-skin vjs-16-9' controls preload='auto'>
       <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a
           href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>
     </video>
@@ -75,30 +73,14 @@
       playbackRates: [0.1, 0.2, 0.3, 0.4, 0.5, 0.8, 1.0, 1.5, 2.0, 4.0, 8.0],
       muted: true,
       controlBar: {
-	pictureInPictureToggle: false
+	      pictureInPictureToggle: false
       }
     };
 
-    var zoomrotate = {
-      rotate: 0,
-      zoom: 1
-    };
 
-	hotkeys('alt+r,alt+z,alt+x,n,m,k,l', function (event, handler){
-		  	var vi = videoplayer.children()[0];
+	hotkeys('n,m,k,l', function (event, handler){
+		  var vi = videoplayer.children()[0];
 			switch (handler.key) {
-			    case 'alt+r':
-					zoomrotate.rotate += 90;
-					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-				    break;
-				case 'alt+z':
-					zoomrotate.zoom += 0.1;
-					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
-					break;
-				case 'alt+x':
-					zoomrotate.zoom -= 0.1;
-					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';		
-					break;
 				case 'n':
 					videoplayer.currentTime(videoplayer.currentTime() - 10);
 					videoplayer.play();
@@ -117,82 +99,14 @@
 					var dist = 1/60;
 					videoplayer.currentTime(videoplayer.currentTime() + dist);
 					break;						
-			    default: 
-			  }
+			  default: 
+			}
 		});
 
     var autoAdvance = false;
     var videoplayer = videojs('my-video', options);
-
-    // rotate
     var vjsButton = videojs.getComponent("Button");
-    var customRotateButton = videojs.extend(vjsButton, {
-      constructor: function (player, options) {
-        vjsButton.call(this, player, options);
-        this.controlText("Rotate +90");
-      },
-      handleClick: function () {
-        //do something on click for example
-        var vi = videoplayer.children()[0];
-        var poster = videoplayer.el_; // div vjs-poster
-
-        zoomrotate.rotate += 90;
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
-        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-      },
-      buildCSSClass: function () {
-        return "vjs-icon-replay vjs-control vjs-button";
-      }
-    });
-    videojs.registerComponent("customRotateButton", customRotateButton);
-    videoplayer.getChild("controlBar").addChild("customRotateButton", {});
-
-
-    // zoom out
-    var vjsButton = videojs.getComponent("Button");
-    var customZoomoutButton = videojs.extend(vjsButton, {
-      constructor: function (player, options) {
-        vjsButton.call(this, player, options);
-        this.controlText("Zoom out");
-      },
-      handleClick: function () {
-        //do something on click for example
-        var vi = videoplayer.children()[0];
-        var poster = videoplayer.el_; // div vjs-poster
-
-        zoomrotate.zoom += 0.1;
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
-        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-      },
-      buildCSSClass: function () {
-        return "vjs-icon-circle-outline vjs-control vjs-button";
-      }
-    });
-    videojs.registerComponent("customZoomoutButton", customZoomoutButton);
-    videoplayer.getChild("controlBar").addChild("customZoomoutButton", {});
-
-    // zoom in
-    var vjsButton = videojs.getComponent("Button");
-    var customZoominButton = videojs.extend(vjsButton, {
-      constructor: function (player, options) {
-        vjsButton.call(this, player, options);
-        this.controlText("Zoom in");
-      },
-      handleClick: function () {
-        //do something on click for example
-        var vi = videoplayer.children()[0];
-        var poster = videoplayer.el_; // div vjs-poster
-
-        zoomrotate.zoom -= 0.1;
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
-        // poster.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
-      },
-      buildCSSClass: function () {
-        return "vjs-icon-circle vjs-control vjs-button";
-      }
-    });
-    videojs.registerComponent("customZoominButton", customZoominButton);
-    videoplayer.getChild("controlBar").addChild("customZoominButton", {});
+    var videoTech = videoplayer.el().querySelector('.vjs-tech');
 
     // prev 
     var customPrevButton = videojs.extend(vjsButton, {
@@ -246,7 +160,7 @@
 	   buildCSSClass: function() {
 			return "vjs-icon-audio-description vjs-control vjs-button";
 	   }
-	});
+	  });
     videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
     videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
 
@@ -291,6 +205,18 @@
       const titleDisplay = document.getElementById('current-item-title');
       titleDisplay.textContent = decodeURIComponent(currentItem.title);
     });
+
+    videoplayer.on('loadedmetadata', function(event) {
+      const currentItem = videoplayer.currentSource();
+      if (currentItem && (videoTech.videoHeight > videoTech.videoWidth)) {
+        videoTech.classList.add('rotated-270');
+      } else {
+        videoTech.classList.remove('rotated-270');
+      }
+    });
+
+
+    
   </script>
 </body>
 
