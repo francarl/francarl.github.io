@@ -20,7 +20,7 @@
     }
 
     .video-js .vjs-tech.rotated-270 {
-      transform: rotate(-90deg) scale(calc(16 / 9)) !important;
+      transform: rotate(-90deg) scale(calc(16 / 9));
     }
   </style>
 </head>
@@ -209,9 +209,18 @@
     videoplayer.on('loadedmetadata', function(event) {
       const currentItem = videoplayer.currentSource();
       if (currentItem && (videoTech.videoHeight > videoTech.videoWidth)) {
-        videoTech.classList.add('rotated-270');
+        const scale = videoTech.videoHeight / videoTech.videoWidth;
+        
+        //zoomPlugin.flip("");
+        zoomPlugin.rotate(-90);
+        zoomPlugin.zoom(scale);
+
+        // videoTech.classList.add('rotated-270');
       } else {
-        videoTech.classList.remove('rotated-270');
+        // videoTech.classList.remove('rotated-270');
+        //zoomPlugin.flip("+");
+        zoomPlugin.rotate(0);
+        zoomPlugin.zoom(1);
       }
     });
 
