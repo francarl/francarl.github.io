@@ -19,10 +19,6 @@ $("head").append("<link href='https://francarl.github.io/zoolz/lib/videojs-zoom/
 
 
 var newStyle = `<style>  
-	.video-js .vjs-tech {  
-	  position: relative;  
-	  height: inherit;     
-	}                      
 	.player {              
 	  width: 80%;          
 	  margin-left: auto;   
@@ -45,9 +41,7 @@ $("head").append(newStyle);
 
 
 $("body").append("<div id='test-popup" + randomId + "' class='player mfp-hide'>        \
-    <video id='zoolz-player" + randomId + "' class='video-js vjs-default-skin' controls preload='auto'      \
-      style='height:auto; width:100%'      \
-      >      \
+    <video id='zoolz-player" + randomId + "' class='video-js vjs-default-skin vjs-16-9' controls preload='auto'>      \
         <p class='vjs-no-js'>To view this video please enable JavaScript, and consider upgrading to a web browser that <a href='http://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a></p>  \
     </video>    \
 	<span id=\"current-item-title\" style=\"color: white;\"></span>  \
@@ -295,6 +289,25 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 			gestureHandler: true
 		});
 		zoomPlugin.enablePlugin();
+
+		var videoTech = videoplayer.el().querySelector('.vjs-tech');
+		videoplayer.on('loadedmetadata', function(event) {
+			const currentItem = videoplayer.currentSource();
+			if (currentItem && (videoTech.videoHeight > videoTech.videoWidth)) {
+				const scale = videoTech.videoHeight / videoTech.videoWidth;
+				
+				//zoomPlugin.flip("");
+				zoomPlugin.rotate(-90);
+				zoomPlugin.zoom(scale);
+
+				// videoTech.classList.add('rotated-270');
+			} else {
+				// videoTech.classList.remove('rotated-270');
+				//zoomPlugin.flip("+");
+				zoomPlugin.rotate(0);
+				zoomPlugin.zoom(1);
+			}
+		});
 
 		$.getScript('https://francarl.github.io/zoolz/lib/magnific-popup/jquery.magnific-popup.js', function () {
 
