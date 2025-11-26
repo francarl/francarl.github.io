@@ -296,16 +296,17 @@ $.getScript('https://francarl.github.io/zoolz/lib/videojs/video.min.js', functio
 			if (currentItem && (videoTech.videoHeight > videoTech.videoWidth)) {
 				const scale = videoTech.videoHeight / videoTech.videoWidth;
 				
-				//zoomPlugin.flip("");
+				zoomrotate.zoom = scale;
+				zoomrotate.rotate = -90;
 				zoomPlugin.rotate(-90);
 				zoomPlugin.zoom(scale);
-
 				// videoTech.classList.add('rotated-270');
 			} else {
-				// videoTech.classList.remove('rotated-270');
-				//zoomPlugin.flip("+");
+				zoomrotate.zoom = 1;
+				zoomrotate.rotate = 0;
 				zoomPlugin.rotate(0);
 				zoomPlugin.zoom(1);
+				// videoTech.classList.remove('rotated-270');
 			}
 		});
 
