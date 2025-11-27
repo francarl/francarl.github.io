@@ -164,6 +164,31 @@
     videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
     videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
 
+    // download frame button
+    var downloadFrameButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Download Frame");
+      },
+      handleClick: function () {
+        var canvas = document.createElement('canvas');
+        canvas.width = videoTech.videoWidth;
+        canvas.height = videoTech.videoHeight;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(videoTech, 0, 0, canvas.width, canvas.height);
+
+        var link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        const timestamp = videoplayer.currentTime().toFixed(2).replace('.', '_');
+        link.download = `frame_${timestamp}.png`;
+        link.click();
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-spinner vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("downloadFrameButton", downloadFrameButton);
+    videoplayer.getChild("controlBar").addChild("downloadFrameButton", {});
 
     var zoomPlugin = videoplayer.zoomPlugin({
       showZoom: true,
