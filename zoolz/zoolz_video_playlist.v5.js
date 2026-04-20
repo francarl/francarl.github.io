@@ -432,11 +432,11 @@ function attachVideo(newElem) {
 					navigator.clipboard.writeText(downloadUrl).then(
 					    function() {
 					      /* clipboard successfully set */
-					      window.alert('Success! The text was copied to your clipboard') 
+					      showToast('Success! The text was copied to your clipboard')
 					    }, 
 					    function() {
 					      /* clipboard write failed */
-					      window.alert('Opps! Your browser does not support the Clipboard API')
+					      showToast('Opps! Your browser does not support the Clipboard API')
 					    }
 					  );
 					return false;
@@ -531,3 +531,28 @@ function attachVideo(newElem) {
 	}
 
 }
+
+// Toast notification
+function showToast(message) {
+  var $toast = $('#zoolz-toast');
+  if ($toast.length === 0) {
+    $('body').append('<div id="zoolz-toast" class="zoolz-toast"></div>');
+    $toast = $('#zoolz-toast');
+  }
+  $toast.text(message).addClass('show');
+  setTimeout(function() {
+    $toast.removeClass('show');
+  }, 2500);
+}
+
+$(document).ready(function() {
+  $('<style>' +
+    '.zoolz-toast {' +
+    'position:fixed;bottom:32px;left:50%;transform:translateX(-50%);' +
+    'background:rgba(0,0,0,0.85);color:#fff;padding:12px 24px;border-radius:6px;' +
+    'font-size:14px;font-family:sans-serif;z-index:99999;pointer-events:none;' +
+    'opacity:0;transition:opacity 0.3s ease;' +
+    '}' +
+    '.zoolz-toast.show { opacity:1; }' +
+    '</style>').appendTo('head');
+});
