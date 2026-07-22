@@ -84,9 +84,13 @@
     };
 
 
-	hotkeys('n,m,k,l', function (event, handler){
+	hotkeys('alt+r,n,m,k,l', function (event, handler){
 		  var vi = videoplayer.children()[0];
 			switch (handler.key) {
+			    case 'alt+r':
+					zoomrotate.rotate += 90;
+					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+				    break;
 				case 'n':
 					videoplayer.currentTime(videoplayer.currentTime() - 10);
 					videoplayer.play();
@@ -113,6 +117,7 @@
     var videoplayer = videojs('my-video', options);
     var vjsButton = videojs.getComponent("Button");
     var videoTech = videoplayer.el().querySelector('.vjs-tech');
+    var zoomrotate = { rotate: 0, zoom: 1 };
 
     // prev 
     var customPrevButton = videojs.extend(vjsButton, {
@@ -169,6 +174,24 @@
 	  });
     videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
     videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
+
+    // rotate
+    var customRotateButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Rotate +90");
+      },
+      handleClick: function () {
+        var vi = videoplayer.children()[0];
+        zoomrotate.rotate += 90;
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-replay vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customRotateButton", customRotateButton);
+    videoplayer.getChild("controlBar").addChild("customRotateButton", {});
 
     // download frame button
     var downloadFrameButton = videojs.extend(vjsButton, {
