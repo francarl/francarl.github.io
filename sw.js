@@ -1,4 +1,5 @@
 const CACHE_NAME = 'video-player-v1';
+const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.ogg', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.m4v', '.3gp'];
 
 const PRECACHE_URLS = [
   '/index.html',
@@ -32,9 +33,23 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+
   if (event.request.url.startsWith('blob:')) {
     return;
   }
+
+  if (event.request.mode === 'navigate' && VIDEO_EXTENSIONS.some(ext => url.pathname.endsWith(ext))) {
+    event.respondWith(
+      caches.match('/index.html').then(cached => cached || fetch('/index.html'))
+    );
+    return;
+  }
+
+  if (VIDEO_EXTENSIONS.some(ext => url.pathname.endsWith(ext))) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
       if (cachedResponse) {

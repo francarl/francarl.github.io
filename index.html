@@ -259,6 +259,36 @@
       navigator.serviceWorker.register('/sw.js');
     }
 
+    if ('launchQueue' in window) {
+      window.launchQueue.setConsumer(launchParams => {
+        if (!launchParams.files.length) return;
+        launchParams.files.forEach(async fileHandle => {
+          const file = await fileHandle.getFile();
+          const url = URL.createObjectURL(file);
+          videoplayer.playlist([{
+            sources: [{ src: url, type: file.type || 'video/mp4', title: file.name }],
+            name: file.name
+          }]);
+          videoplayer.play();
+        });
+      });
+    }
+
+    (function() {
+      var path = window.location.pathname;
+      var videoExts = ['.mp4', '.webm', '.ogg', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.m4v', '.3gp'];
+      if (videoExts.some(function(ext) { return path.endsWith(ext); })) {
+        var videoUrl = window.location.href;
+        var fileName = path.split('/').pop();
+        var sourceType = 'video/' + (path.endsWith('.mp4') ? 'mp4' : path.endsWith('.mkv') ? 'mp4' : path.split('.').pop());
+        videoplayer.playlist([{
+          sources: [{ src: videoUrl, type: sourceType, title: fileName }],
+          name: fileName
+        }]);
+        videoplayer.play();
+      }
+    })();
+
   </script>
 </body>
 
