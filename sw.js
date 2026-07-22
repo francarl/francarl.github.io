@@ -1,4 +1,4 @@
-const CACHE_NAME = 'video-player-v2';
+const CACHE_NAME = 'video-player-v1';
 const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.ogg', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.m4v', '.3gp'];
 
 const PRECACHE_URLS = [
