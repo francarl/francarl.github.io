@@ -389,8 +389,10 @@
     var urlParam = new URLSearchParams(window.location.search).get('url');
     if (urlParam) {
       var fileName = urlParam.split('/').pop().split('?')[0];
-      var ext = fileName.split('.').pop();
-      var sourceType = 'video/' + (ext === 'mkv' ? 'mp4' : ext);
+      var dispMatch = urlParam.match(/response-content-disposition.*filename="?([^"&]+)"?/);
+      if (dispMatch) fileName = decodeURIComponent(dispMatch[1]);
+      var ext = fileName.indexOf('.') > 0 ? fileName.split('.').pop() : '';
+      var sourceType = ext ? 'video/' + (ext === 'mkv' ? 'mp4' : ext) : 'video/mp4';
       videoplayer.playlist([{
         sources: [{ src: urlParam, type: sourceType, title: fileName }],
         name: fileName
