@@ -28,6 +28,9 @@
     .video-js .vjs-tech.rotated-270 {
       transform: rotate(-90deg) scale(calc(16 / 9));
     }
+
+    .vjs-icon-fliph:before { content: '\21D4'; font-size: 1.3em; }
+    .vjs-icon-flipv:before { content: '\21D5'; font-size: 1.3em; }
   </style>
 </head>
 
@@ -89,7 +92,7 @@
 			switch (handler.key) {
 			    case 'alt+r':
 					zoomrotate.rotate += 90;
-					vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';	
+					applyTransform(vi);
 				    break;
 				case 'n':
 					videoplayer.currentTime(videoplayer.currentTime() - 10);
@@ -117,63 +120,68 @@
     var videoplayer = videojs('my-video', options);
     var vjsButton = videojs.getComponent("Button");
     var videoTech = videoplayer.el().querySelector('.vjs-tech');
-    var zoomrotate = { rotate: 0, zoom: 1 };
+    var zoomrotate = { rotate: 0, zoom: 1, panX: 0, panY: 0, flipH: 1, flipV: 1 };
+    var panning = false, panStart = { x: 0, y: 0 };
+
+    function applyTransform(el) {
+      el.style.transform = 'translate(' + zoomrotate.panX + 'px, ' + zoomrotate.panY + 'px) scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg) scale(' + zoomrotate.flipH + ', ' + zoomrotate.flipV + ')';
+    }
 
     // prev 
-    var customPrevButton = videojs.extend(vjsButton, {
-      constructor: function (player, options) {
-        vjsButton.call(this, player, options);
-        this.controlText("Prev");
-      },
-      handleClick: function () {
-        videoplayer.playlist.previous();
-      },
-      buildCSSClass: function () {
-        return "vjs-icon-previous-item vjs-control vjs-button";
-      }
-    });
-
-    videojs.registerComponent("customPrevButton", customPrevButton);
-    videoplayer.getChild("controlBar").addChild("customPrevButton", {});
-
-    // next 
-    var customNextButton = videojs.extend(vjsButton, {
-      constructor: function (player, options) {
-        vjsButton.call(this, player, options);
-        this.controlText("Next");
-      },
-      handleClick: function () {
-        videoplayer.playlist.next();
-      },
-      buildCSSClass: function () {
-        return "vjs-icon-next-item vjs-control vjs-button";
-      }
-    });
-
-    videojs.registerComponent("customNextButton", customNextButton);
-    videoplayer.getChild("controlBar").addChild("customNextButton", {});
-
-    // toggle autoadvance 
-    var toggleAutoAdvanceButton = videojs.extend(vjsButton, {
-	   constructor: function(player, options) {
-			vjsButton.call(this, player, options);
-			this.controlText("Autoadvance OFF");
-	   },
-	   handleClick: function() {
-		   autoAdvance = !autoAdvance;
-		   if (autoAdvance) {
-				videoplayer.playlist.autoadvance(0);
-		   } else {
-			   videoplayer.playlist.autoadvance();
-		   }
-		   this.controlText("Autoadvance " + (autoAdvance ? "ON" : "OFF"));
-	   },
-	   buildCSSClass: function() {
-			return "vjs-icon-audio-description vjs-control vjs-button";
-	   }
-	  });
-    videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
-    videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
+    // var customPrevButton = videojs.extend(vjsButton, {
+    //   constructor: function (player, options) {
+    //     vjsButton.call(this, player, options);
+    //     this.controlText("Prev");
+    //   },
+    //   handleClick: function () {
+    //     videoplayer.playlist.previous();
+    //   },
+    //   buildCSSClass: function () {
+    //     return "vjs-icon-previous-item vjs-control vjs-button";
+    //   }
+    // });
+    // 
+    // videojs.registerComponent("customPrevButton", customPrevButton);
+    // videoplayer.getChild("controlBar").addChild("customPrevButton", {});
+    // 
+    // // next 
+    // var customNextButton = videojs.extend(vjsButton, {
+    //   constructor: function (player, options) {
+    //     vjsButton.call(this, player, options);
+    //     this.controlText("Next");
+    //   },
+    //   handleClick: function () {
+    //     videoplayer.playlist.next();
+    //   },
+    //   buildCSSClass: function () {
+    //     return "vjs-icon-next-item vjs-control vjs-button";
+    //   }
+    // });
+    // 
+    // videojs.registerComponent("customNextButton", customNextButton);
+    // videoplayer.getChild("controlBar").addChild("customNextButton", {});
+    // 
+    // // toggle autoadvance 
+    // var toggleAutoAdvanceButton = videojs.extend(vjsButton, {
+    //    constructor: function(player, options) {
+    // 		vjsButton.call(this, player, options);
+    // 		this.controlText("Autoadvance OFF");
+    //    },
+    //    handleClick: function() {
+    // 	   autoAdvance = !autoAdvance;
+    // 	   if (autoAdvance) {
+    // 			videoplayer.playlist.autoadvance(0);
+    // 	   } else {
+    // 		   videoplayer.playlist.autoadvance();
+    // 	   }
+    // 	   this.controlText("Autoadvance " + (autoAdvance ? "ON" : "OFF"));
+    //    },
+    //    buildCSSClass: function() {
+    // 		return "vjs-icon-audio-description vjs-control vjs-button";
+    //    }
+    //   });
+    // videojs.registerComponent("toggleAutoAdvanceButton", toggleAutoAdvanceButton);
+    // videoplayer.getChild("controlBar").addChild("toggleAutoAdvanceButton", {});	  
 
     // rotate
     var customRotateButton = videojs.extend(vjsButton, {
@@ -184,7 +192,7 @@
       handleClick: function () {
         var vi = videoplayer.children()[0];
         zoomrotate.rotate += 90;
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        applyTransform(vi);
       },
       buildCSSClass: function () {
         return "vjs-icon-replay vjs-control vjs-button";
@@ -202,7 +210,7 @@
       handleClick: function () {
         zoomrotate.zoom -= 0.1;
         var vi = videoplayer.children()[0];
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        applyTransform(vi);
       },
       buildCSSClass: function () {
         return "vjs-icon-circle-outline vjs-control vjs-button";
@@ -220,7 +228,7 @@
       handleClick: function () {
         zoomrotate.zoom += 0.1;
         var vi = videoplayer.children()[0];
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        applyTransform(vi);
       },
       buildCSSClass: function () {
         return "vjs-icon-circle vjs-control vjs-button";
@@ -228,6 +236,40 @@
     });
     videojs.registerComponent("customZoomInButton", customZoomInButton);
     videoplayer.getChild("controlBar").addChild("customZoomInButton", {});
+
+    // flip H
+    var customFlipHButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Flip H");
+      },
+      handleClick: function () {
+        zoomrotate.flipH *= -1;
+        applyTransform(videoplayer.children()[0]);
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-fliph vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customFlipHButton", customFlipHButton);
+    videoplayer.getChild("controlBar").addChild("customFlipHButton", {});
+
+    // flip V
+    var customFlipVButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Flip V");
+      },
+      handleClick: function () {
+        zoomrotate.flipV *= -1;
+        applyTransform(videoplayer.children()[0]);
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-flipv vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customFlipVButton", customFlipVButton);
+    videoplayer.getChild("controlBar").addChild("customFlipVButton", {});
 
     // download frame button
     var downloadFrameButton = videojs.extend(vjsButton, {
@@ -255,13 +297,43 @@
     videojs.registerComponent("downloadFrameButton", downloadFrameButton);
     videoplayer.getChild("controlBar").addChild("downloadFrameButton", {});
 
-    var zoomPlugin = videoplayer.zoomPlugin({
-      showZoom: true,
-      showMove: true,
-      showRotate: true,
-      gestureHandler: true
+    // var zoomPlugin = videoplayer.zoomPlugin({
+    //   showZoom: true,
+    //   showMove: true,
+    //   showRotate: true,
+    //   gestureHandler: true
+    // });
+    // zoomPlugin.enablePlugin();
+
+    videoTech.addEventListener('wheel', function(e) {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        zoomrotate.zoom *= e.deltaY > 0 ? 0.9 : 1.1;
+        zoomrotate.zoom = Math.max(0.1, Math.min(10, zoomrotate.zoom));
+        applyTransform(videoTech);
+      }
+    }, { passive: false });
+
+    videoTech.addEventListener('mousedown', function(e) {
+      if (e.button !== 0) return;
+      panning = true;
+      panStart.x = e.clientX - zoomrotate.panX;
+      panStart.y = e.clientY - zoomrotate.panY;
+      videoTech.style.cursor = 'grabbing';
     });
-    zoomPlugin.enablePlugin();
+
+    document.addEventListener('mousemove', function(e) {
+      if (!panning) return;
+      zoomrotate.panX = e.clientX - panStart.x;
+      zoomrotate.panY = e.clientY - panStart.y;
+      applyTransform(videoTech);
+    });
+
+    document.addEventListener('mouseup', function() {
+      if (!panning) return;
+      panning = false;
+      videoTech.style.cursor = '';
+    });
 
     var input = document.getElementById('my-file-input');
 
