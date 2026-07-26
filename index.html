@@ -386,6 +386,18 @@
       }
     });
 
+    var urlParam = new URLSearchParams(window.location.search).get('url');
+    if (urlParam) {
+      var fileName = urlParam.split('/').pop().split('?')[0];
+      var ext = fileName.split('.').pop();
+      var sourceType = 'video/' + (ext === 'mkv' ? 'mp4' : ext);
+      videoplayer.playlist([{
+        sources: [{ src: urlParam, type: sourceType, title: fileName }],
+        name: fileName
+      }]);
+      videoplayer.play();
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js');
     }
