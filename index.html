@@ -193,6 +193,42 @@
     videojs.registerComponent("customRotateButton", customRotateButton);
     videoplayer.getChild("controlBar").addChild("customRotateButton", {});
 
+    // zoom out
+    var customZoomOutButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Zoom -");
+      },
+      handleClick: function () {
+        zoomrotate.zoom -= 0.1;
+        var vi = videoplayer.children()[0];
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-circle-outline vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customZoomOutButton", customZoomOutButton);
+    videoplayer.getChild("controlBar").addChild("customZoomOutButton", {});
+
+    // zoom in
+    var customZoomInButton = videojs.extend(vjsButton, {
+      constructor: function (player, options) {
+        vjsButton.call(this, player, options);
+        this.controlText("Zoom +");
+      },
+      handleClick: function () {
+        zoomrotate.zoom += 0.1;
+        var vi = videoplayer.children()[0];
+        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+      },
+      buildCSSClass: function () {
+        return "vjs-icon-circle vjs-control vjs-button";
+      }
+    });
+    videojs.registerComponent("customZoomInButton", customZoomInButton);
+    videoplayer.getChild("controlBar").addChild("customZoomInButton", {});
+
     // download frame button
     var downloadFrameButton = videojs.extend(vjsButton, {
       constructor: function (player, options) {
