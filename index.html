@@ -372,25 +372,25 @@
       const currentItem = videoplayer.currentSource();
       if (currentItem && (videoTech.videoHeight > videoTech.videoWidth)) {
         const scale = videoTech.videoHeight / videoTech.videoWidth;
-        
-        //zoomPlugin.flip("");
-        zoomPlugin.rotate(-90);
-        zoomPlugin.zoom(scale);
-
-        // videoTech.classList.add('rotated-270');
+        zoomrotate.rotate = -90;
+        zoomrotate.zoom = scale;
+        applyTransform(videoTech);
       } else {
-        // videoTech.classList.remove('rotated-270');
-        //zoomPlugin.flip("+");
-        zoomPlugin.rotate(0);
-        zoomPlugin.zoom(1);
+        zoomrotate.rotate = 0;
+        zoomrotate.zoom = 1;
+        applyTransform(videoTech);
       }
     });
 
-    var urlParam = new URLSearchParams(window.location.search).get('url');
-    if (urlParam) {
+    var search = window.location.search;
+    var urlMatch = search.match(/[?&]url=([^&]+)/);
+    if (urlMatch) {
+      var idx = search.indexOf(urlMatch[0]) + urlMatch[0].length;
+      var urlParam = decodeURIComponent(urlMatch[1]) + (idx < search.length ? search.slice(idx) : '');
       var fileName = urlParam.split('/').pop().split('?')[0];
-      var dispMatch = urlParam.match(/response-content-disposition.*filename="?([^"&]+)"?/);
+      var dispMatch = urlParam.match(/filename%3D%22(.+)%22/);
       if (dispMatch) fileName = decodeURIComponent(dispMatch[1]);
+      console.log('fileName:', fileName);
       var ext = fileName.indexOf('.') > 0 ? fileName.split('.').pop() : '';
       var sourceType = ext ? 'video/' + (ext === 'mkv' ? 'mp4' : ext) : 'video/mp4';
       videoplayer.playlist([{
