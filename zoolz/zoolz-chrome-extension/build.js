@@ -51,9 +51,6 @@ async function build() {
     'videojs-vjsdownload/videojs-vjsdownload.css',
     'videojs-framebyframe/videojs.framebyframe.js',
     'videojs-framebyframe/videojs.framebyframe.css',
-
-    'videojs-zoom/videojs-zoom.js',
-    'videojs-zoom/videojs-zoom.css',
     'magnific-popup/jquery.magnific-popup.js',
     'magnific-popup/magnific-popup.css',
   ];

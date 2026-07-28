@@ -31,7 +31,6 @@ async function init() {
     'magnific-popup/magnific-popup.css',
     'videojs-vjsdownload/videojs-vjsdownload.css',
     'videojs-framebyframe/videojs.framebyframe.css',
-    'videojs-zoom/videojs-zoom.css',
   ];
 
   await Promise.all(cssFiles.map(f => loadCSS(lib(f))));
@@ -42,7 +41,6 @@ async function init() {
     lib('videojs-vjsdownload/videojs-vjsdownload.js'),
     lib('videojs-framebyframe/videojs.framebyframe.js'),
     lib('videojs/hotkeys.min.js'),
-    lib('videojs-zoom/videojs-zoom.js'),
     lib('magnific-popup/jquery.magnific-popup.js'),
   ];
 

@@ -134,14 +134,6 @@ function setupPlayer() {
     }
   });
 
-  const zoomPlugin = videoplayer.zoomPlugin({
-    showZoom: true,
-    showMove: true,
-    showRotate: true,
-    gestureHandler: true,
-  });
-  zoomPlugin.enablePlugin();
-
   const videoTech: HTMLVideoElement | null = videoplayer.el().querySelector('.vjs-tech');
   videoplayer.on('loadedmetadata', () => {
     const cur = videoplayer.currentSource();
@@ -149,13 +141,11 @@ function setupPlayer() {
       const scale = videoTech.videoHeight / videoTech.videoWidth;
       zoomrotate.zoom = scale;
       zoomrotate.rotate = -90;
-      zoomPlugin.rotate(-90);
-      zoomPlugin.zoom(scale);
+      videoTech.style.transform = `scale(${scale}) rotate(-90deg)`;
     } else {
       zoomrotate.zoom = 1;
       zoomrotate.rotate = 0;
-      zoomPlugin.rotate(0);
-      zoomPlugin.zoom(1);
+      if (videoTech) videoTech.style.transform = '';
     }
   });
 }
@@ -366,17 +356,21 @@ function attachVideo(newElem: any) {
       aCP.click(function (this: any, event: any) {
         event.stopPropagation();
         const url = $(this).attr('href') as string;
-        navigator.clipboard.writeText(url).then(
-          () => showToast('URL copied to clipboard'),
-          () => showToast('Clipboard API not supported')
-        );
+        if (isAndroid) {
+          window.open('https://francarl.github.io/?url=' + encodeURIComponent(url), '_blank');
+        } else {
+          navigator.clipboard.writeText(url).then(
+            () => showToast('URL copied to clipboard'),
+            () => showToast('Clipboard API not supported')
+          );
+        }
         return false;
       });
       newElem.parent().append(aCP);
 
       // Click handler
       const ua = navigator.userAgent.toLowerCase();
-      const isAndroid = ua.indexOf('android') > -1;
+      const isAndroid = ua.indexOf('android') > -1
 
       if (isAndroid) {
         newElem.click(function (this: any, event: any) {

@@ -31,9 +31,6 @@
         "lib/videojs-vjsdownload/videojs-vjsdownload.css",
         "lib/videojs-framebyframe/videojs.framebyframe.js",
         "lib/videojs-framebyframe/videojs.framebyframe.css",
-
-        "lib/videojs-zoom/videojs-zoom.js",
-        "lib/videojs-zoom/videojs-zoom.css",
         "lib/magnific-popup/jquery.magnific-popup.js",
         "lib/magnific-popup/magnific-popup.css"
       ],
