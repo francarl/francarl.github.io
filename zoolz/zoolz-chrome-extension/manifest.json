@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Zoolz Video Playlist",
+  "version": "5.0.0",
+  "description": "Video player with playlist for Zoolz",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [],
+  "host_permissions": [
+    "https://*.zoolz.co.uk/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://*.zoolz.co.uk/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "app.js",
+        "lib/videojs/video.min.js",
+        "lib/videojs/video-js.min.css",
+        "lib/videojs/videojs-playlist.js",
+        "lib/videojs/hotkeys.min.js",
+        "lib/videojs-vjsdownload/videojs-vjsdownload.js",
+        "lib/videojs-vjsdownload/videojs-vjsdownload.css",
+        "lib/videojs-framebyframe/videojs.framebyframe.js",
+        "lib/videojs-framebyframe/videojs.framebyframe.css",
+
+        "lib/videojs-zoom/videojs-zoom.js",
+        "lib/videojs-zoom/videojs-zoom.css",
+        "lib/magnific-popup/jquery.magnific-popup.js",
+        "lib/magnific-popup/magnific-popup.css"
+      ],
+      "matches": ["https://*.zoolz.co.uk/*"]
+    }
+  ]
+}
