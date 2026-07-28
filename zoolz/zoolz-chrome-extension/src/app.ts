@@ -5,6 +5,8 @@ declare var hotkeys: any;
 interface ZoomRotate {
   rotate: number;
   zoom: number;
+  flipH: number;
+  flipV: number;
 }
 
 interface SourceItem {
@@ -18,7 +20,11 @@ let randomId: number;
 let videoplayer: any = null;
 let sources: SourceItem[] = [];
 let autoAdvance = false;
-let zoomrotate: ZoomRotate = { rotate: 0, zoom: 1 };
+let zoomrotate: ZoomRotate = { rotate: 0, zoom: 1, flipH: 1, flipV: 1 };
+
+function applyTransform(el: HTMLElement) {
+  el.style.transform = `translate(${zoomrotate.panX || 0}px, ${zoomrotate.panY || 0}px) scale(${zoomrotate.zoom}) rotate(${zoomrotate.rotate}deg) scale(${zoomrotate.flipH}, ${zoomrotate.flipV})`;
+}
 
 // ponytail: set page globals consumed by Zoolz site
 (window as any)._pageLimit = 5000;
@@ -76,6 +82,8 @@ function injectCustomStyles() {
       transition: opacity 0.3s ease;
     }
     .zoolz-toast.show { opacity: 1; }
+    .vjs-icon-fliph:before { content: '\\21D4'; font-size: 1.3em; }
+    .vjs-icon-flipv:before { content: '\\21D5'; font-size: 1.3em; }
   `;
   document.head.appendChild(style);
 }
@@ -141,11 +149,11 @@ function setupPlayer() {
       const scale = videoTech.videoHeight / videoTech.videoWidth;
       zoomrotate.zoom = scale;
       zoomrotate.rotate = -90;
-      videoTech.style.transform = `scale(${scale}) rotate(-90deg)`;
+      applyTransform(videoTech);
     } else {
       zoomrotate.zoom = 1;
       zoomrotate.rotate = 0;
-      if (videoTech) videoTech.style.transform = '';
+      if (videoTech) applyTransform(videoTech);
     }
   });
 }
@@ -156,15 +164,15 @@ function setupHotkeys() {
     switch (handler.key) {
       case 'alt+r':
         zoomrotate.rotate += 90;
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        applyTransform(vi);
         break;
       case 'alt+z':
         zoomrotate.zoom += 0.1;
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        applyTransform(vi);
         break;
       case 'alt+x':
         zoomrotate.zoom -= 0.1;
-        vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+        applyTransform(vi);
         break;
       case 'n':
         videoplayer.currentTime(videoplayer.currentTime() - 10);
@@ -198,7 +206,7 @@ function registerCustomButtons() {
     handleClick: function (this: any) {
       const vi: HTMLElement = videoplayer.children()[0];
       zoomrotate.rotate += 90;
-      vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+      applyTransform(vi);
     },
     buildCSSClass: function (this: any) {
       return 'vjs-icon-replay vjs-control vjs-button';
@@ -216,7 +224,7 @@ function registerCustomButtons() {
     handleClick: function (this: any) {
       const vi: HTMLElement = videoplayer.children()[0];
       zoomrotate.zoom += 0.1;
-      vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+      applyTransform(vi);
     },
     buildCSSClass: function (this: any) {
       return 'vjs-icon-circle-outline vjs-control vjs-button';
@@ -234,7 +242,7 @@ function registerCustomButtons() {
     handleClick: function (this: any) {
       const vi: HTMLElement = videoplayer.children()[0];
       zoomrotate.zoom -= 0.1;
-      vi.style.transform = 'scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg)';
+      applyTransform(vi);
     },
     buildCSSClass: function (this: any) {
       return 'vjs-icon-circle vjs-control vjs-button';
@@ -296,6 +304,40 @@ function registerCustomButtons() {
   });
   videojs.registerComponent('toggleAutoAdvanceButton', ToggleAutoAdvanceButton);
   videoplayer.getChild('controlBar').addChild('toggleAutoAdvanceButton', {});
+
+  // Flip H
+  const FlipHButton = videojs.extend(Button, {
+    constructor: function (this: any, player: any, options: any) {
+      Button.call(this, player, options);
+      this.controlText('Flip H');
+    },
+    handleClick: function (this: any) {
+      zoomrotate.flipH *= -1;
+      applyTransform(videoplayer.children()[0]);
+    },
+    buildCSSClass: function (this: any) {
+      return 'vjs-icon-fliph vjs-control vjs-button';
+    },
+  });
+  videojs.registerComponent('customFlipHButton', FlipHButton);
+  videoplayer.getChild('controlBar').addChild('customFlipHButton', {});
+
+  // Flip V
+  const FlipVButton = videojs.extend(Button, {
+    constructor: function (this: any, player: any, options: any) {
+      Button.call(this, player, options);
+      this.controlText('Flip V');
+    },
+    handleClick: function (this: any) {
+      zoomrotate.flipV *= -1;
+      applyTransform(videoplayer.children()[0]);
+    },
+    buildCSSClass: function (this: any) {
+      return 'vjs-icon-flipv vjs-control vjs-button';
+    },
+  });
+  videojs.registerComponent('customFlipVButton', FlipVButton);
+  videoplayer.getChild('controlBar').addChild('customFlipVButton', {});
 }
 
 function attachVideo(newElem: any) {
