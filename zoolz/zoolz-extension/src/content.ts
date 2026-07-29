@@ -1,6 +1,8 @@
 declare const chrome: any;
+declare const browser: any;
 
-const BASE = chrome.runtime.getURL('');
+const _browser = typeof browser !== 'undefined' ? browser : chrome;
+const BASE = _browser.runtime.getURL('');
 
 function loadCSS(url: string): Promise<void> {
   return new Promise((resolve, reject) => {

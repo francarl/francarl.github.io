@@ -3,6 +3,11 @@
   "name": "Zoolz Video Playlist",
   "version": "5.0.0",
   "description": "Video player with playlist for Zoolz",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "zoolz-video-playlist@francarl.github.io"
+    }
+  },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
