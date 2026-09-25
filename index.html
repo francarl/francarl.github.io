@@ -121,6 +121,7 @@
     var vjsButton = videojs.getComponent("Button");
     var videoTech = videoplayer.el().querySelector('.vjs-tech');
     var zoomrotate = { rotate: 0, zoom: 1, panX: 0, panY: 0, flipH: 1, flipV: 1 };
+    var panning = false, panStart = { x: 0, y: 0 };
 
     function applyTransform(el) {
       el.style.transform = 'translate(' + zoomrotate.panX + 'px, ' + zoomrotate.panY + 'px) scale(' + zoomrotate.zoom + ') rotate(' + zoomrotate.rotate + 'deg) scale(' + zoomrotate.flipH + ', ' + zoomrotate.flipV + ')';
@@ -296,13 +297,43 @@
     videojs.registerComponent("downloadFrameButton", downloadFrameButton);
     videoplayer.getChild("controlBar").addChild("downloadFrameButton", {});
 
-    var zoomPlugin = videoplayer.zoomPlugin({
-      showZoom: true,
-      showMove: true,
-      showRotate: true,
-      gestureHandler: true
+    // var zoomPlugin = videoplayer.zoomPlugin({
+    //   showZoom: true,
+    //   showMove: true,
+    //   showRotate: true,
+    //   gestureHandler: true
+    // });
+    // zoomPlugin.enablePlugin();
+
+    videoTech.addEventListener('wheel', function(e) {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        zoomrotate.zoom *= e.deltaY > 0 ? 0.9 : 1.1;
+        zoomrotate.zoom = Math.max(0.1, Math.min(10, zoomrotate.zoom));
+        applyTransform(videoTech);
+      }
+    }, { passive: false });
+
+    videoTech.addEventListener('mousedown', function(e) {
+      if (e.button !== 0) return;
+      panning = true;
+      panStart.x = e.clientX - zoomrotate.panX;
+      panStart.y = e.clientY - zoomrotate.panY;
+      videoTech.style.cursor = 'grabbing';
     });
-    zoomPlugin.enablePlugin();
+
+    document.addEventListener('mousemove', function(e) {
+      if (!panning) return;
+      zoomrotate.panX = e.clientX - panStart.x;
+      zoomrotate.panY = e.clientY - panStart.y;
+      applyTransform(videoTech);
+    });
+
+    document.addEventListener('mouseup', function() {
+      if (!panning) return;
+      panning = false;
+      videoTech.style.cursor = '';
+    });
 
     var input = document.getElementById('my-file-input');
 
