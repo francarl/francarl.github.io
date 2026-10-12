@@ -17,6 +17,7 @@ USE_CHAT_TEMPLATE="true"
 ENABLE_MTP="true"
 MODEL_DIR="ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF"
 CACHE_TYPE="q4_0"
+API_KEY=${APIKEY:-default}
 
 # Parsing args
 while [ $# -gt 0 ]; do
@@ -129,7 +130,7 @@ export LD_LIBRARY_PATH=./cuda-12.8/:/usr/local/lib/python3.13/dist-packages/nvid
     --reasoning-preserve \
     -b 2048 -ub 512 \
     -lv 4 \
-    --api-key "Ciccio77#" \
+    --api-key "$API_KEY" \
     --jinja \
     --no-warmup \
     $CHAT_TEMPLATE_ARG \
