@@ -16,7 +16,7 @@ USE_CHAT_TEMPLATE="true"
 ENABLE_MTP="true"
 MODEL_DIR="ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF"
 CACHE_TYPE="q4_0"
-API_KEY=${APIKEY:-default}
+API_KEY=default
 
 # Parsing args
 while [ $# -gt 0 ]; do
@@ -37,8 +37,12 @@ while [ $# -gt 0 ]; do
       CTX_SIZE="$2"
       shift 2
       ;;
+    --api-key)
+      API_KEY="$2"
+      shift 2
+      ;;
     --help)
-      echo "Usage: --version <V> (default Q8_K_XL) --enable-mtp <true|false> (default false) --cache-type <T> (default q8_0) --ctx-size <N> (default 131072)"
+      echo "Usage: --version <V> (default Q8_K_XL) --enable-mtp <true|false> (default false) --cache-type <T> (default q8_0) --ctx-size <N> (default 131072) --api-key <api-key>"
       exit 1
       ;;
     *)
