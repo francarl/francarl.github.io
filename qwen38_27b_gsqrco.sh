@@ -16,7 +16,7 @@ USE_CHAT_TEMPLATE="true"
 ENABLE_MTP="true"
 MODEL_DIR="ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF"
 CACHE_TYPE="q4_0"
-API_KEY=default
+API_KEY=Ciccio77#
 
 # Parsing args
 while [ $# -gt 0 ]; do
