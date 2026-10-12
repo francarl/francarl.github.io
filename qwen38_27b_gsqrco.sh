@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # avvia con "curl -LsSf https://francarl.github.io/qwen38_27b_gsqrco.sh | sh"
 
-# Arresta lo script in caso di errori
 set -e
 
 [ -f "./frpc.sh" ] && bash ./frpc.sh
