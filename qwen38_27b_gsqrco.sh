@@ -63,7 +63,8 @@ printf '%-20s %s\n' \
   "CACHE_TYPE"       "$CACHE_TYPE" \
   "N_CPU_MOE"        "$N_CPU_MOE" \
   "NGL"              "$NGL" \
-  "MODEL"            "$MODEL"
+  "MODEL"            "$MODEL" \
+  "API_KEY"          "$API_KEY"
 
 
 # Configurazione argomento MoE
