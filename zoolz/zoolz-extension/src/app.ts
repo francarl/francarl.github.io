@@ -20,7 +20,12 @@ let randomId: number;
 let videoplayer: any = null;
 let sources: SourceItem[] = [];
 let autoAdvance = false;
+let androidMode: 'intent' | 'player' | null = null;
 let zoomrotate: ZoomRotate = { rotate: 0, zoom: 1, flipH: 1, flipV: 1 };
+
+function trace(step: string, extra?: unknown) {
+  console.log(`[zoolz][${performance.now().toFixed(0)}ms] ${step}`, extra ?? '');
+}
 
 function applyTransform(el: HTMLElement) {
   el.style.transform = `translate(${zoomrotate.panX || 0}px, ${zoomrotate.panY || 0}px) scale(${zoomrotate.zoom}) rotate(${zoomrotate.rotate}deg) scale(${zoomrotate.flipH}, ${zoomrotate.flipV})`;
@@ -31,6 +36,7 @@ function applyTransform(el: HTMLElement) {
 (window as any).UPLOAD_LIMIT = 1;
 
 function init() {
+  trace('init', navigator.userAgent);
   const vault = $('li[title="Vault"]');
   machineId = vault.attr('data-value');
   randomId = Math.floor(Math.random() * 200) + 1;
@@ -82,6 +88,28 @@ function injectCustomStyles() {
       transition: opacity 0.3s ease;
     }
     .zoolz-toast.show { opacity: 1; }
+    .zoolz-choice-box {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 24px;
+      border-radius: 8px;
+      text-align: center;
+      width: 320px;
+      margin: 0 auto;
+      font-family: sans-serif;
+    }
+    .zoolz-choice-box p { margin-bottom: 16px; }
+    .zoolz-choice-box button {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px;
+      border: 1px solid #555;
+      border-radius: 6px;
+      background: #2d2d2d;
+      color: #fff;
+      font-size: 15px;
+    }
     .vjs-icon-fliph:before { content: '\\21D4'; font-size: 1.3em; }
     .vjs-icon-flipv:before { content: '\\21D5'; font-size: 1.3em; }
   `;
@@ -144,6 +172,11 @@ function setupPlayer() {
 
   const videoTech: HTMLVideoElement | null = videoplayer.el().querySelector('.vjs-tech');
   videoplayer.on('loadedmetadata', () => {
+    trace('loadedmetadata', {
+      duration: videoplayer.duration(),
+      w: videoTech?.videoWidth,
+      h: videoTech?.videoHeight,
+    });
     const cur = videoplayer.currentSource();
     if (cur && videoTech && videoTech.videoHeight > videoTech.videoWidth) {
       const scale = videoTech.videoHeight / videoTech.videoWidth;
@@ -340,6 +373,90 @@ function registerCustomButtons() {
   videoplayer.getChild('controlBar').addChild('customFlipVButton', {});
 }
 
+function openWithIntent(newElem: any) {
+  $('.ovSel').css('border', 'none');
+  newElem.children('.ovSel').css('border', '1px solid red');
+
+  let downloadUrl = newElem.attr('href') as string;
+  downloadUrl =
+    downloadUrl.replace('https:', 'intent:') +
+    '#Intent;action=android.intent.action.VIEW;scheme=https;type=video/mp4;end';
+  trace('open:android-intent', downloadUrl);
+  window.location.href = downloadUrl;
+}
+
+function openWithPlayer(newElem: any, durl: string) {
+  const t0 = performance.now();
+  trace('open:start');
+  $('.ovSel').css('border', 'none');
+  newElem.children('.ovSel').css('border', '1px solid red');
+
+  sources.sort((a, b) => {
+    const ka = +a.idx;
+    const kb = +b.idx;
+    return ka < kb ? -1 : ka > kb ? 1 : 0;
+  });
+
+  videoplayer.playlist(sources);
+  const idx = videoplayer.playlist.indexOf(durl);
+  videoplayer.playlist.currentItem(idx);
+  trace('open:playlist-loaded', { items: sources.length, idx });
+  videoplayer.play();
+  trace('open:play-called');
+  videoplayer.one('playing', () =>
+    trace('open:playing', `after ${(performance.now() - t0).toFixed(0)}ms`)
+  );
+
+  videoplayer.off('playlistitem');
+  videoplayer.on('playlistitem', function () {
+    const curIdx = videoplayer.playlist.currentIndex();
+    const curElem = sources[curIdx].obj;
+    $('.ovSel').css('border', 'none');
+    curElem.children('.ovSel').css('border', '1px solid red');
+  });
+
+  $.magnificPopup.open({
+    items: { src: '#test-popup' + randomId, type: 'inline' },
+    callbacks: {
+      close: function () {
+        trace('open:popup-closed');
+        videoplayer.pause();
+        videoplayer.src('');
+      },
+    },
+  });
+  trace('open:popup-opened');
+}
+
+function askAndroidMode(newElem: any, durl: string) {
+  let $modal = $('#android-choice-popup');
+  if ($modal.length === 0) {
+    $modal = $(
+      '<div id="android-choice-popup" class="mfp-hide">' +
+        '<div class="zoolz-choice-box">' +
+        '<p>How do you want to open this video?</p>' +
+        '<button id="android-choice-intent">External app</button>' +
+        '<button id="android-choice-player">Built-in player</button>' +
+        '</div>' +
+        '</div>'
+    ).appendTo('body');
+  }
+  const choose = (mode: 'intent' | 'player') => {
+    androidMode = mode;
+    trace('open:android-choice', mode);
+    $.magnificPopup.close();
+    if (mode === 'intent') {
+      openWithIntent(newElem);
+    } else {
+      // mfp is still closing the choice modal: defer or the player popup won't open
+      setTimeout(() => openWithPlayer(newElem, durl), 0);
+    }
+  };
+  $modal.find('#android-choice-intent').off('click').on('click', () => choose('intent'));
+  $modal.find('#android-choice-player').off('click').on('click', () => choose('player'));
+  $.magnificPopup.open({ items: { src: '#android-choice-popup', type: 'inline' } });
+}
+
 function attachVideo(newElem: any) {
   const originalURL = newElem.attr('onclick');
   const regex = /q=[\w=]+/g;
@@ -351,6 +468,7 @@ function attachVideo(newElem: any) {
   if (!m) return;
 
   const newUrl = 'MyComputers/Download.aspx?' + m[0];
+  trace('url-resolve:start', newUrl);
 
   $.ajax({
     url: newUrl,
@@ -363,6 +481,7 @@ function attachVideo(newElem: any) {
     },
     success: function (data: any, _textStatus: string, request: any) {
       const durl: string = request.getResponseHeader('downloadUrl');
+      trace('url-resolve:ok', durl);
       newElem.attr('href', durl);
 
       let title = 'N/D';
@@ -417,57 +536,25 @@ function attachVideo(newElem: any) {
       if (isAndroid) {
         newElem.click(function (this: any, event: any) {
           event.stopPropagation();
-          $('.ovSel').css('border', 'none');
-          newElem.children('.ovSel').css('border', '1px solid red');
-
-          let downloadUrl = newElem.attr('href') as string;
-          downloadUrl =
-            downloadUrl.replace('https:', 'intent:') +
-            '#Intent;action=android.intent.action.VIEW;scheme=https;type=video/mp4;end';
-          window.location.href = downloadUrl;
+          if (androidMode === null) {
+            askAndroidMode(newElem, durl);
+          } else if (androidMode === 'intent') {
+            openWithIntent(newElem);
+          } else {
+            openWithPlayer(newElem, durl);
+          }
           return false;
         });
       } else {
         newElem.click(function (this: any, event: any) {
           event.stopPropagation();
-          $('.ovSel').css('border', 'none');
-          newElem.children('.ovSel').css('border', '1px solid red');
-
-          sources.sort((a, b) => {
-            const ka = +a.idx;
-            const kb = +b.idx;
-            return ka < kb ? -1 : ka > kb ? 1 : 0;
-          });
-
-          videoplayer.playlist(sources);
-          const idx = videoplayer.playlist.indexOf(durl);
-          videoplayer.playlist.currentItem(idx);
-          videoplayer.play();
-
-          videoplayer.off('playlistitem');
-          videoplayer.on('playlistitem', function () {
-            const curIdx = videoplayer.playlist.currentIndex();
-            const curElem = sources[curIdx].obj;
-            $('.ovSel').css('border', 'none');
-            curElem.children('.ovSel').css('border', '1px solid red');
-          });
-
-          $.magnificPopup.open({
-            items: { src: '#test-popup' + randomId, type: 'inline' },
-            callbacks: {
-              close: function () {
-                videoplayer.pause();
-                videoplayer.src('');
-              },
-            },
-          });
-
+          openWithPlayer(newElem, durl);
           return false;
         });
       }
     },
     error: function (error: any) {
-      console.log(error);
+      trace('url-resolve:error', { url: newUrl, error });
     },
   });
 }
