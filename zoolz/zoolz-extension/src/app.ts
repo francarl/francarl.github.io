@@ -171,6 +171,9 @@ function setupPlayer() {
   });
 
   const videoTech: HTMLVideoElement | null = videoplayer.el().querySelector('.vjs-tech');
+  videoplayer.on('error', () =>
+    trace('player-error', { code: videoTech?.error?.code, msg: videoTech?.error?.message })
+  );
   videoplayer.on('loadedmetadata', () => {
     trace('loadedmetadata', {
       duration: videoplayer.duration(),
@@ -531,7 +534,7 @@ function attachVideo(newElem: any) {
 
       // Click handler
       const ua = navigator.userAgent.toLowerCase();
-      const isAndroid = ua.indexOf('android') > -1
+      const isAndroid = ua.indexOf('android') > -1 || ua.indexOf('cros') > -1
 
       if (isAndroid) {
         newElem.click(function (this: any, event: any) {
